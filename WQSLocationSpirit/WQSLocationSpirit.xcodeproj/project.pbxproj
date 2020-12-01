@@ -14,6 +14,8 @@
 		869DF161257630A100D916EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF160257630A100D916EC /* main.m */; };
 		869DF16B257630A100D916EC /* WQSLocationSpiritTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF16A257630A100D916EC /* WQSLocationSpiritTests.m */; };
 		869DF176257630A100D916EC /* WQSLocationSpiritUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF175257630A100D916EC /* WQSLocationSpiritUITests.m */; };
+		869DF1A02576452000D916EC /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF19F2576452000D916EC /* SearchViewController.m */; };
+		86FC870C2576495E003FAAF1 /* UIDevice+MC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FC870B2576495E003FAAF1 /* UIDevice+MC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,11 @@
 		869DF171257630A100D916EC /* WQSLocationSpiritUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WQSLocationSpiritUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		869DF175257630A100D916EC /* WQSLocationSpiritUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WQSLocationSpiritUITests.m; sourceTree = "<group>"; };
 		869DF177257630A100D916EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		869DF19E2576452000D916EC /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		869DF19F2576452000D916EC /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		86FC86CF257648A1003FAAF1 /* CommonConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonConfig.h; sourceTree = "<group>"; };
+		86FC870A2576495E003FAAF1 /* UIDevice+MC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDevice+MC.h"; sourceTree = "<group>"; };
+		86FC870B2576495E003FAAF1 /* UIDevice+MC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+MC.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +109,12 @@
 				869DF14E2576309F00D916EC /* AppDelegate.h */,
 				869DF14F2576309F00D916EC /* AppDelegate.m */,
 				869DF1542576309F00D916EC /* ViewController.h */,
+				86FC870A2576495E003FAAF1 /* UIDevice+MC.h */,
+				86FC870B2576495E003FAAF1 /* UIDevice+MC.m */,
 				869DF1552576309F00D916EC /* ViewController.m */,
+				86FC86CF257648A1003FAAF1 /* CommonConfig.h */,
+				869DF19E2576452000D916EC /* SearchViewController.h */,
+				869DF19F2576452000D916EC /* SearchViewController.m */,
 				869DF15A257630A100D916EC /* Assets.xcassets */,
 				869DF15C257630A100D916EC /* LaunchScreen.storyboard */,
 				869DF15F257630A100D916EC /* Info.plist */,
@@ -259,6 +271,8 @@
 			files = (
 				869DF1562576309F00D916EC /* ViewController.m in Sources */,
 				869DF1502576309F00D916EC /* AppDelegate.m in Sources */,
+				86FC870C2576495E003FAAF1 /* UIDevice+MC.m in Sources */,
+				869DF1A02576452000D916EC /* SearchViewController.m in Sources */,
 				869DF161257630A100D916EC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

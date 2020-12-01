@@ -6,6 +6,7 @@
 //
 
 #import "SearchViewController.h"
+#import "CommonConfig.h"
 
 @interface SearchViewController ()
 

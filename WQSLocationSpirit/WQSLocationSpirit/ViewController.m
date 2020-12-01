@@ -6,47 +6,57 @@
 //
 
 #import "ViewController.h"
+#import "CommonConfig.h"
 #import <MapKit/MapKit.h>
+#import "SearchViewController.h"
 
 @interface ViewController ()<MKMapViewDelegate,CLLocationManagerDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) UIView *navigationBar;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.mapView];
     
     if ([CLLocationManager locationServicesEnabled]) {
         // 开启定位
         [self.locationManager startUpdatingLocation];
-    }else{
-        NSLog(@"系统定位尚未打开，请到【设置-隐私-定位服务】中手动打开");
     }
 }
 
 -(CLLocationManager *)locationManager{
     if (!_locationManager) {
         // 创建CoreLocation管理对象
-        CLLocationManager *locationManager = [[CLLocationManager alloc]init];
+        _locationManager = [[CLLocationManager alloc]init];
         // 定位权限检查
-        [locationManager requestWhenInUseAuthorization];
+        [_locationManager requestWhenInUseAuthorization];
         // 设定定位精准度
-        [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         // 设置代理
-        locationManager.delegate = self;
-        
-        _locationManager = locationManager;
+        _locationManager.delegate = self;
     }
     return _locationManager;
-    
+}
+
+- (UIView *)navigationBar {
+    if (nil == _navigationBar) {
+        _navigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIDeviceScreenWidth, kNavigationBarHeight)];
+        _navigationBar.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchAction)];
+        [_navigationBar addGestureRecognizer:tap];
+        _navigationBar.backgroundColor = [UIColor whiteColor];
+    }
+    return _navigationBar;
 }
 
 - (MKMapView *)mapView {
     if (nil == _mapView) {
-        _mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        _mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight, UIDeviceScreenWidth, UIDeviceScreenHeight - kNavigationBarHeight)];
         _mapView.mapType = MKMapTypeStandard;
         _mapView.zoomEnabled = YES;
         _mapView.scrollEnabled = YES;
@@ -69,6 +79,13 @@
         _mapView.showsUserLocation = YES;
     }
     return _mapView;
+}
+
+- (void)searchAction {
+    SearchViewController *searchVC = [SearchViewController new];
+    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
+    navigation.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:navigation animated:YES completion:nil];
 }
 
 // 位置变化时调用，每个位置变化时只调用一次
