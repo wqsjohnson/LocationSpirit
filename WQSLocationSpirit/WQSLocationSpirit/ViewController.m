@@ -9,11 +9,14 @@
 #import "CommonConfig.h"
 #import <MapKit/MapKit.h>
 #import "SearchViewController.h"
+#import "WQSAnnotionModel.h"
 
 @interface ViewController ()<MKMapViewDelegate,CLLocationManagerDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) UIView *navigationBar;
+@property (nonatomic, strong) WQSAnnotionModel *annotionModel;
+@property (nonatomic, strong) UIButton *sureButton;
 @end
 
 @implementation ViewController
@@ -22,6 +25,9 @@
     [super viewDidLoad];
     [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.mapView];
+    self.annotionModel = WQSAnnotionModel.new;
+    [self.mapView addAnnotation:self.annotionModel];
+    [self.view addSubview:self.sureButton];
     
     if ([CLLocationManager locationServicesEnabled]) {
         // 开启定位
@@ -81,6 +87,28 @@
     return _mapView;
 }
 
+- (UIButton *)sureButton {
+    if (nil == _sureButton) {
+        _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _sureButton.frame = CGRectMake((UIDeviceScreenWidth - 100) / 2, (UIDeviceScreenHeight - 140), 100, 40);
+        _sureButton.layer.cornerRadius = 20;
+        _sureButton.layer.masksToBounds = YES;
+        [_sureButton setBackgroundColor:[UIColor purpleColor]];
+        [_sureButton setTitle:@"设定" forState:UIControlStateNormal];
+        _sureButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_sureButton setTitleColor:[UIColor whiteColor]
+                          forState:UIControlStateNormal];
+        [_sureButton addTarget:self
+                        action:@selector(sureAction:)
+              forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _sureButton;
+}
+
+- (void)sureAction:(UIButton *)btn {
+    
+}
+
 - (void)searchAction {
     SearchViewController *searchVC = [SearchViewController new];
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
@@ -102,47 +130,48 @@
 
 // 地图的显示区域已经发生改变的时候调用
 - (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    
+    [self.annotionModel setCoordinate:mapView.region.center];
 }
 
 #pragma mark -代理方法，定位权限检查
 -(void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager{
-//    switch (manager.status) {
-//        case kCLAuthorizationStatusNotDetermined:{
-//            NSLog(@"用户还未决定授权");
-//            // 主动获得授权
-//            [self.locationManager requestWhenInUseAuthorization];
-//            break;
-//        }
-//        case kCLAuthorizationStatusRestricted:
-//        {
-//            NSLog(@"访问受限");
-//            // 主动获得授权
-//            [self.locationManager requestWhenInUseAuthorization];
-//            break;
-//        }
-//        case kCLAuthorizationStatusDenied:{
-//            // 此时使用主动获取方法也不能申请定位权限
-//            // 类方法，判断是否开启定位服务
-//            if ([CLLocationManager locationServicesEnabled]) {
-//                NSLog(@"定位服务开启，被拒绝");
-//            } else {
-//                NSLog(@"定位服务关闭，不可用");
-//            }
-//            break;
-//        }
-//        case kCLAuthorizationStatusAuthorizedAlways:{
-//            NSLog(@"获得前后台授权");
-//            break;
-//        }
-//        case kCLAuthorizationStatusAuthorizedWhenInUse:{
-//            NSLog(@"获得前台授权");
-//            break;
-//        }
-//        default:
-//            break;
-//    }
+    switch (manager.authorizationStatus) {
+        case kCLAuthorizationStatusNotDetermined:{
+            NSLog(@"用户还未决定授权");
+            // 主动获得授权
+            [self.locationManager requestWhenInUseAuthorization];
+            break;
+        }
+        case kCLAuthorizationStatusRestricted:
+        {
+            NSLog(@"访问受限");
+            // 主动获得授权
+            [self.locationManager requestWhenInUseAuthorization];
+            break;
+        }
+        case kCLAuthorizationStatusDenied:{
+            // 此时使用主动获取方法也不能申请定位权限
+            // 类方法，判断是否开启定位服务
+            if ([CLLocationManager locationServicesEnabled]) {
+                NSLog(@"定位服务开启，被拒绝");
+            } else {
+                NSLog(@"定位服务关闭，不可用");
+            }
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedAlways:{
+            NSLog(@"获得前后台授权");
+            break;
+        }
+        case kCLAuthorizationStatusAuthorizedWhenInUse:{
+            NSLog(@"获得前台授权");
+            break;
+        }
+        default:
+            break;
+    }
 }
+
 #pragma mark -获取位置
 - (void)locationManager:(CLLocationManager *)manager
    didUpdateLocations:(NSArray *)locations{
@@ -155,6 +184,7 @@
     }
     //停止定位
     [self.locationManager stopUpdatingLocation];
+    [self.annotionModel setCoordinate:newLocation.coordinate];
     // 获取定位经纬度
 //    CLLocationCoordinate2D coor2D = newLocation.coordinate;
 //    NSLog(@"纬度为:%f, 经度为:%f", coor2D.latitude, coor2D.longitude);
@@ -167,7 +197,7 @@
             return ;
         }
         // 获取地标
-        CLPlacemark *placeMark = [placemarks firstObject];
+        //CLPlacemark *placeMark = [placemarks firstObject];
 //        NSLog(@"获取地标 = %@,",placeMark.locality);
     }];
    
