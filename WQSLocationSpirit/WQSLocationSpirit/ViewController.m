@@ -52,10 +52,31 @@
 - (UIView *)navigationBar {
     if (nil == _navigationBar) {
         _navigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIDeviceScreenWidth, kNavigationBarHeight)];
-        _navigationBar.userInteractionEnabled = YES;
+        _navigationBar.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
+        
+        //modification
+        UIImageView *modificateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, kStatusGAP + (kNavigationBarContentHeight - 20) / 2.0, 20, 20)];
+        modificateImageView.image = [UIImage imageNamed:@"modification"];
+        [_navigationBar addSubview:modificateImageView];
+        
+        UIView *searchView = [[UIView alloc] initWithFrame:CGRectMake(kNavigationBarContentHeight, kStatusGAP + (kNavigationBarContentHeight - 30) / 2.0, UIDeviceScreenWidth - kNavigationBarContentHeight * 2, 30)];
+        searchView.userInteractionEnabled = YES;
+        searchView.backgroundColor = [UIColor whiteColor];
+        searchView.layer.cornerRadius = 15;
+        searchView.layer.masksToBounds = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchAction)];
-        [_navigationBar addGestureRecognizer:tap];
-        _navigationBar.backgroundColor = [UIColor whiteColor];
+        [searchView addGestureRecognizer:tap];
+        [_navigationBar addSubview:searchView];
+        
+        UIImageView *searchImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 7.5, 15, 15)];
+        searchImageView.image = [UIImage imageNamed:@"search"];
+        [searchView addSubview:searchImageView];
+        
+        UILabel *searchLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 0, searchView.frame.size.width - 40, 30)];
+        searchLabel.text = @"输入地名进行搜索";
+        searchLabel.textColor = [UIColor lightGrayColor];
+        searchLabel.font = [UIFont systemFontOfSize:13];
+        [searchView addSubview:searchLabel];
     }
     return _navigationBar;
 }
@@ -93,8 +114,8 @@
         _sureButton.frame = CGRectMake((UIDeviceScreenWidth - 100) / 2, (UIDeviceScreenHeight - 140), 100, 40);
         _sureButton.layer.cornerRadius = 20;
         _sureButton.layer.masksToBounds = YES;
-        [_sureButton setBackgroundColor:[UIColor purpleColor]];
-        [_sureButton setTitle:@"设定" forState:UIControlStateNormal];
+        [_sureButton setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
+        [_sureButton setTitle:@"开始设置" forState:UIControlStateNormal];
         _sureButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_sureButton setTitleColor:[UIColor whiteColor]
                           forState:UIControlStateNormal];
@@ -114,6 +135,14 @@
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
     navigation.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:navigation animated:YES completion:nil];
+}
+
+- (void)_showSureBtn {
+    
+}
+
+- (void)_hideSureBtn {
+    
 }
 
 // 位置变化时调用，每个位置变化时只调用一次
