@@ -22,17 +22,34 @@
 }
 
 - (void)_initUI {
-    self.locationImageView = [UIImageView new];
+    self.locationImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 15, 20, 20)];
+    self.locationImageView.image = [UIImage imageNamed:@"location_user_panel"];
     [self.contentView addSubview:self.locationImageView];
+    
+    self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, UIDeviceScreenWidth - 100, 50)];
+    self.locationLabel.font = [UIFont systemFontOfSize:13];
+    self.locationLabel.textColor = [UIColor lightGrayColor];
+    [self.contentView addSubview:self.locationLabel];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 49.5, UIDeviceScreenWidth, 0.5)];
+    line.backgroundColor = [UIColor lightGrayColor];
+    [self.contentView addSubview:line];
 }
 
 @end
 @interface SearchViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *navigationBar;
+@property (nonatomic, strong) NSMutableArray *searchResults;
 @end
 
 @implementation SearchViewController
+- (NSMutableArray *)searchResults {
+    if (nil == _searchResults) {
+        _searchResults = [NSMutableArray array];
+    }
+    return _searchResults;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -67,8 +84,8 @@
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         cancelButton.frame = CGRectMake(UIDeviceScreenWidth - kNavigationBarContentHeight, kStatusGAP, kNavigationBarContentHeight, kNavigationBarContentHeight);
         [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
-        cancelButton.titleLabel.font = [UIFont systemFontOfSize:15];
-        [cancelButton setTitleColor:[UIColor blackColor]
+        cancelButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [cancelButton setTitleColor:[[UIColor blackColor] colorWithAlphaComponent:0.7]
                            forState:UIControlStateNormal];
         [cancelButton addTarget:self
                         action:@selector(cancelAction:)
@@ -83,6 +100,7 @@
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight, UIDeviceScreenWidth, UIDeviceScreenHeight - kNavigationBarHeight) style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _tableView;
 }
@@ -102,14 +120,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellID = [NSString stringWithFormat:@"cellID_%@", NSStringFromClass([self class])];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    SearchLocationCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[SearchLocationCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                         reuseIdentifier:cellID];
     }
+    cell.locationLabel.text = @"搜索定位位置";
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.selectLocationComplete) {
+        CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(39.9,116.4);
+        self.selectLocationComplete(locationCoordinate);
+    }
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
 }
 @end

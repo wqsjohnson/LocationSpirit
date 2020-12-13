@@ -131,7 +131,11 @@
 }
 
 - (void)searchAction {
+    __weak typeof(self) weakSelf = self;
     SearchViewController *searchVC = [SearchViewController new];
+    searchVC.selectLocationComplete = ^(CLLocationCoordinate2D locationCoordinate) {
+        [weakSelf.mapView setCenterCoordinate:locationCoordinate animated:NO];
+    };
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
     navigation.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:navigation animated:YES completion:nil];
