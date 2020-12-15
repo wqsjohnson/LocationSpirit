@@ -7,6 +7,7 @@
 
 #import "SettingViewController.h"
 #import "AboutUsViewController.h"
+#import "CommonMapSettingManager.h"
 #import "CommonConfig.h"
 #import "Masonry.h"
 
@@ -153,7 +154,7 @@
     
     if (indexPath.row == 0) {
         cell.titleLabel.text = @"地图选择";
-        cell.detailLabel.text = @"高德地图";
+        cell.detailLabel.text = CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap ? @"内置地图 " : @"高德地图";
         cell.rightArrowImageView.hidden = NO;
         cell.rightSwitch.hidden = YES;
         cell.detailLabel.hidden = NO;
@@ -173,6 +174,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    __weak typeof(self) weakSelf = self;
     if (indexPath.row == 0) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"选择"
                                                                                  message:@"选择地图"
@@ -186,10 +188,20 @@
         [alertController addAction:[UIAlertAction actionWithTitle:@"高德地图"
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * _Nonnull action) {
+            if (CommonMapSettingManager.manager.type == LocationViewControllerTypeAMap) {
+                return;
+            }
+            CommonMapSettingManager.manager.type = LocationViewControllerTypeAMap;
+            [weakSelf.tableView reloadData];
         }]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"内置地图"
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * _Nonnull action) {
+            if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+                return;
+            }
+            CommonMapSettingManager.manager.type = LocationViewControllerTypeSysMap;
+            [weakSelf.tableView reloadData];
         }]];
 
         [self presentViewController:alertController

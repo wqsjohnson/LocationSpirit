@@ -70,9 +70,9 @@
                    action:@selector(toSetting:)
          forControlEvents:UIControlEventTouchUpInside];
     
-    NSArray *datas = @[@{@"img":@"",@"title":@"自由编辑定位",@"detail":@"拖动位置，搜索地标，轻松定位"},
+    NSArray *datas = @[@{@"img":@"",@"title":@"路线规划",@"detail":@"最优路线推荐"},
                        @{@"img":@"",@"title":@"经纬度移动",@"detail":@"输入经纬度，精准位移"},
-                       @{@"img":@"",@"title":@"路线规划",@"detail":@"最优路线推荐"}];
+                       @{@"img":@"",@"title":@"自由编辑定位",@"detail":@"拖动位置，搜索地标，轻松定位"}];
     for (NSInteger i = 0; i < datas.count; i++) {
         UIView *contentView = UIView.new;
         contentView.backgroundColor = [UIColor whiteColor];
@@ -147,16 +147,37 @@
     switch (view.tag) {
         case 0:
             //自由编辑定位
+            [self _toSatnav];
             break;
         case 1:
             //经纬度移动
+            [self _toGPS];
             break;
         case 2:
             //路线规划
+            [self _toLocation];
             break;
         default:
             break;
     }
+}
+
+- (void)_toLocation {
+    LocationViewController *locationVC = LocationViewController.new;
+    [self.navigationController pushViewController:locationVC
+                                         animated:YES];
+}
+
+- (void)_toGPS {
+    GPSViewController *gpsVC = GPSViewController.new;
+    [self.navigationController pushViewController:gpsVC
+                                         animated:YES];
+}
+
+- (void)_toSatnav {
+    SatnavViewController *satnavVC = SatnavViewController.new;
+    [self.navigationController pushViewController:satnavVC
+                                         animated:YES];
 }
 
 - (void)toSetting:(UIButton *)sender {

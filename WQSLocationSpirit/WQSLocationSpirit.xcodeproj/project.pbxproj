@@ -14,6 +14,7 @@
 		8666CFF7258756B6005733ED /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF6258756B6005733ED /* LocationViewController.m */; };
 		8666D000258756F5005733ED /* GPSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFFF258756F5005733ED /* GPSViewController.m */; };
 		869268E12588A0F7007CA29A /* AboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869268E02588A0F7007CA29A /* AboutUsViewController.m */; };
+		869268ED2588B766007CA29A /* CommonMapSettingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 869268EC2588B766007CA29A /* CommonMapSettingManager.m */; };
 		869DF1502576309F00D916EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF14F2576309F00D916EC /* AppDelegate.m */; };
 		869DF1562576309F00D916EC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF1552576309F00D916EC /* ViewController.m */; };
 		869DF15B257630A100D916EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 869DF15A257630A100D916EC /* Assets.xcassets */; };
@@ -57,6 +58,8 @@
 		8666CFFF258756F5005733ED /* GPSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPSViewController.m; sourceTree = "<group>"; };
 		869268DF2588A0F7007CA29A /* AboutUsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutUsViewController.h; sourceTree = "<group>"; };
 		869268E02588A0F7007CA29A /* AboutUsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutUsViewController.m; sourceTree = "<group>"; };
+		869268EB2588B766007CA29A /* CommonMapSettingManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonMapSettingManager.h; sourceTree = "<group>"; };
+		869268EC2588B766007CA29A /* CommonMapSettingManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CommonMapSettingManager.m; sourceTree = "<group>"; };
 		869DF14B2576309F00D916EC /* WQSLocationSpirit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WQSLocationSpirit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		869DF14E2576309F00D916EC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		869DF14F2576309F00D916EC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 				869DF15C257630A100D916EC /* LaunchScreen.storyboard */,
 				869DF15F257630A100D916EC /* Info.plist */,
 				869DF160257630A100D916EC /* main.m */,
+				869268EB2588B766007CA29A /* CommonMapSettingManager.h */,
+				869268EC2588B766007CA29A /* CommonMapSettingManager.m */,
 			);
 			path = WQSLocationSpirit;
 			sourceTree = "<group>";
@@ -450,6 +455,7 @@
 				869DF161257630A100D916EC /* main.m in Sources */,
 				86F17845258854C00034AB2E /* UIView+ActivityIndicatorView.m in Sources */,
 				8666D000258756F5005733ED /* GPSViewController.m in Sources */,
+				869268ED2588B766007CA29A /* CommonMapSettingManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

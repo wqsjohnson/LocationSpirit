@@ -9,6 +9,7 @@
 #import <MAMapKit/MAMapKit.h>
 #import <MapKit/MapKit.h>
 #import "CommonConfig.h"
+#import "CommonMapSettingManager.h"
 //ctrl
 #import "SearchViewController.h"
 //model
@@ -26,7 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.navigationBar];
-    if (self.type == LocationViewControllerTypeSysMap) {
+    if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
         [self.view addSubview:self.mapView];
     } else {
         [self.view addSubview:self.maMapView];
@@ -41,10 +42,14 @@
         _navigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIDeviceScreenWidth, kNavigationBarHeight)];
         _navigationBar.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
         
-        //modification
-        UIImageView *modificateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, kStatusGAP + (kNavigationBarContentHeight - 20) / 2.0, 20, 20)];
-        modificateImageView.image = [UIImage imageNamed:@"modification"];
-        [_navigationBar addSubview:modificateImageView];
+        UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        backBtn.frame = CGRectMake(0, kStatusGAP, kNavigationBarContentHeight, kNavigationBarContentHeight);
+        [backBtn setImage:[UIImage imageNamed:@"me_back"]
+                    forState:UIControlStateNormal];
+        [_navigationBar addSubview:backBtn];
+        [backBtn addTarget:self
+                    action:@selector(backAcvtion:)
+          forControlEvents:UIControlEventTouchUpInside];
         
         UIView *searchView = [[UIView alloc] initWithFrame:CGRectMake(kNavigationBarContentHeight, kStatusGAP + (kNavigationBarContentHeight - 30) / 2.0, UIDeviceScreenWidth - kNavigationBarContentHeight * 2, 30)];
         searchView.userInteractionEnabled = YES;
@@ -119,6 +124,10 @@
               forControlEvents:UIControlEventTouchUpInside];
     }
     return _sureButton;
+}
+
+- (void)backAcvtion:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)sureAction:(UIButton *)btn {
