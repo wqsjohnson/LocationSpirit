@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4979E4C3EDF51DE76E98F06F /* libPods-WQSLocationSpirit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C357B0A8B0744E72A0711A8 /* libPods-WQSLocationSpirit.a */; };
 		861B4D40257739910031842A /* WQSAnnotionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B4D3F257739910031842A /* WQSAnnotionModel.m */; };
+		8666CFE8258755B7005733ED /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFE7258755B7005733ED /* SettingViewController.m */; };
+		8666CFF125875688005733ED /* SatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF025875688005733ED /* SatnavViewController.m */; };
+		8666CFF7258756B6005733ED /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF6258756B6005733ED /* LocationViewController.m */; };
+		8666D000258756F5005733ED /* GPSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFFF258756F5005733ED /* GPSViewController.m */; };
 		869DF1502576309F00D916EC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF14F2576309F00D916EC /* AppDelegate.m */; };
 		869DF1562576309F00D916EC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF1552576309F00D916EC /* ViewController.m */; };
 		869DF15B257630A100D916EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 869DF15A257630A100D916EC /* Assets.xcassets */; };
@@ -37,8 +42,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7D4593C52FDCF24D7BF3EC8D /* Pods-WQSLocationSpirit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQSLocationSpirit.release.xcconfig"; path = "Target Support Files/Pods-WQSLocationSpirit/Pods-WQSLocationSpirit.release.xcconfig"; sourceTree = "<group>"; };
 		861B4D3E257739910031842A /* WQSAnnotionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WQSAnnotionModel.h; sourceTree = "<group>"; };
 		861B4D3F257739910031842A /* WQSAnnotionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WQSAnnotionModel.m; sourceTree = "<group>"; };
+		8666CFE6258755B7005733ED /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		8666CFE7258755B7005733ED /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		8666CFEF25875688005733ED /* SatnavViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SatnavViewController.h; sourceTree = "<group>"; };
+		8666CFF025875688005733ED /* SatnavViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SatnavViewController.m; sourceTree = "<group>"; };
+		8666CFF5258756B6005733ED /* LocationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationViewController.h; sourceTree = "<group>"; };
+		8666CFF6258756B6005733ED /* LocationViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationViewController.m; sourceTree = "<group>"; };
+		8666CFFE258756F5005733ED /* GPSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPSViewController.h; sourceTree = "<group>"; };
+		8666CFFF258756F5005733ED /* GPSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPSViewController.m; sourceTree = "<group>"; };
 		869DF14B2576309F00D916EC /* WQSLocationSpirit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WQSLocationSpirit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		869DF14E2576309F00D916EC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		869DF14F2576309F00D916EC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -59,6 +73,8 @@
 		86FC86CF257648A1003FAAF1 /* CommonConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonConfig.h; sourceTree = "<group>"; };
 		86FC870A2576495E003FAAF1 /* UIDevice+MC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDevice+MC.h"; sourceTree = "<group>"; };
 		86FC870B2576495E003FAAF1 /* UIDevice+MC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+MC.m"; sourceTree = "<group>"; };
+		8C357B0A8B0744E72A0711A8 /* libPods-WQSLocationSpirit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WQSLocationSpirit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6C11A79B0112E33B73C3E59 /* Pods-WQSLocationSpirit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQSLocationSpirit.debug.xcconfig"; path = "Target Support Files/Pods-WQSLocationSpirit/Pods-WQSLocationSpirit.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4979E4C3EDF51DE76E98F06F /* libPods-WQSLocationSpirit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0275F808EC7F230B08537327 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C357B0A8B0744E72A0711A8 /* libPods-WQSLocationSpirit.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		869DF1422576309F00D916EC = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +118,8 @@
 				869DF169257630A100D916EC /* WQSLocationSpiritTests */,
 				869DF174257630A100D916EC /* WQSLocationSpiritUITests */,
 				869DF14C2576309F00D916EC /* Products */,
+				C309F53AEC90257C9A2D50F9 /* Pods */,
+				0275F808EC7F230B08537327 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -120,6 +147,14 @@
 				86FC86CF257648A1003FAAF1 /* CommonConfig.h */,
 				869DF19E2576452000D916EC /* SearchViewController.h */,
 				869DF19F2576452000D916EC /* SearchViewController.m */,
+				8666CFE6258755B7005733ED /* SettingViewController.h */,
+				8666CFE7258755B7005733ED /* SettingViewController.m */,
+				8666CFEF25875688005733ED /* SatnavViewController.h */,
+				8666CFF025875688005733ED /* SatnavViewController.m */,
+				8666CFF5258756B6005733ED /* LocationViewController.h */,
+				8666CFF6258756B6005733ED /* LocationViewController.m */,
+				8666CFFE258756F5005733ED /* GPSViewController.h */,
+				8666CFFF258756F5005733ED /* GPSViewController.m */,
 				869DF15A257630A100D916EC /* Assets.xcassets */,
 				869DF15C257630A100D916EC /* LaunchScreen.storyboard */,
 				869DF15F257630A100D916EC /* Info.plist */,
@@ -146,6 +181,16 @@
 			path = WQSLocationSpiritUITests;
 			sourceTree = "<group>";
 		};
+		C309F53AEC90257C9A2D50F9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B6C11A79B0112E33B73C3E59 /* Pods-WQSLocationSpirit.debug.xcconfig */,
+				7D4593C52FDCF24D7BF3EC8D /* Pods-WQSLocationSpirit.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -153,6 +198,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 869DF17A257630A100D916EC /* Build configuration list for PBXNativeTarget "WQSLocationSpirit" */;
 			buildPhases = (
+				E648841DAE5D1D93E41E57CF /* [CP] Check Pods Manifest.lock */,
 				869DF1472576309F00D916EC /* Sources */,
 				869DF1482576309F00D916EC /* Frameworks */,
 				869DF1492576309F00D916EC /* Resources */,
@@ -269,17 +315,46 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		E648841DAE5D1D93E41E57CF /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WQSLocationSpirit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		869DF1472576309F00D916EC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				869DF1562576309F00D916EC /* ViewController.m in Sources */,
+				8666CFF7258756B6005733ED /* LocationViewController.m in Sources */,
 				861B4D40257739910031842A /* WQSAnnotionModel.m in Sources */,
 				869DF1502576309F00D916EC /* AppDelegate.m in Sources */,
+				8666CFE8258755B7005733ED /* SettingViewController.m in Sources */,
 				86FC870C2576495E003FAAF1 /* UIDevice+MC.m in Sources */,
+				8666CFF125875688005733ED /* SatnavViewController.m in Sources */,
 				869DF1A02576452000D916EC /* SearchViewController.m in Sources */,
 				869DF161257630A100D916EC /* main.m in Sources */,
+				8666D000258756F5005733ED /* GPSViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +515,7 @@
 		};
 		869DF17B257630A100D916EC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B6C11A79B0112E33B73C3E59 /* Pods-WQSLocationSpirit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -458,6 +534,7 @@
 		};
 		869DF17C257630A100D916EC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D4593C52FDCF24D7BF3EC8D /* Pods-WQSLocationSpirit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

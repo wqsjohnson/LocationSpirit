@@ -1,0 +1,12 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '9.0'
+
+# 官方仓库CDN地址 pod 1.7.2
+source 'https://cdn.cocoapods.org/'
+
+inhibit_all_warnings!
+
+target 'WQSLocationSpirit' do
+    pod 'Masonry'
+    pod 'MBProgressHUD'
+end
