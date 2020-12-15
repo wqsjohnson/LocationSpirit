@@ -10,4 +10,5 @@ target 'WQSLocationSpirit' do
     pod 'Masonry'
     pod 'MBProgressHUD'
     pod 'AMap2DMap'
+    pod 'AMapSearch'
 end
