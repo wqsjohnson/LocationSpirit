@@ -10,6 +10,66 @@
 #import "CommonConfig.h"
 #import "Masonry.h"
 
+@interface SettingCell : UITableViewCell
+@property (nonatomic, strong) UIImageView *rightArrowImageView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *detailLabel;
+@property (nonatomic, strong) UISwitch *rightSwitch;
+@end
+
+@implementation SettingCell
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self _initUI];
+    }
+    return self;
+}
+
+- (void)_initUI {
+    self.rightArrowImageView = UIImageView.new;
+    self.rightArrowImageView.image = [UIImage imageNamed:@"setting_right"];
+    [self.contentView addSubview:self.rightArrowImageView];
+    [self.rightArrowImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.contentView).offset(-20);
+    }];
+    
+    self.titleLabel = UILabel.new;
+    self.titleLabel.font = [UIFont systemFontOfSize:15];
+    self.titleLabel.textColor = [UIColor blackColor];
+    [self.contentView addSubview:self.titleLabel];
+    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.contentView);
+        make.left.mas_equalTo(self.contentView).offset(20);
+    }];
+    
+    self.detailLabel = UILabel.new;
+    self.detailLabel.font = [UIFont systemFontOfSize:15];
+    self.detailLabel.textColor = [UIColor blackColor];
+    [self.contentView addSubview:self.detailLabel];
+    [self.detailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.rightArrowImageView.mas_left).offset(-5);
+    }];
+    
+    self.rightSwitch = UISwitch.new;
+    [self.contentView addSubview:self.rightSwitch];
+    [self.rightSwitch mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.contentView).offset(-20);
+    }];
+    
+    UIView *line = UIView.new;
+    line.backgroundColor = [UIColor lightGrayColor];
+    [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.mas_equalTo(self.contentView);
+        make.height.mas_equalTo(0.5);
+    }];
+}
+
+@end
+
 @interface SettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @end
@@ -69,6 +129,7 @@
                                                   style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _tableView;
 }
@@ -84,26 +145,28 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSString *cellID = [NSString stringWithFormat:@"cellID_%@", NSStringFromClass([self class])];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    SettingCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (nil == cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+        cell = [[SettingCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:cellID];
     }
-    cell.textLabel.font = [UIFont systemFontOfSize:15];
-    cell.textLabel.textColor = [UIColor blackColor];
-    cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
-    cell.detailTextLabel.textColor = [UIColor lightGrayColor];
     
     if (indexPath.row == 0) {
-        cell.textLabel.text = @"地图选择";
-        cell.accessoryType = UITableViewCellAccessoryDetailButton;
-        cell.detailTextLabel.text = @"高德地图";
+        cell.titleLabel.text = @"地图选择";
+        cell.detailLabel.text = @"高德地图";
+        cell.rightArrowImageView.hidden = NO;
+        cell.rightSwitch.hidden = YES;
+        cell.detailLabel.hidden = NO;
     } else if (indexPath.row == 1) {
-        cell.textLabel.text = @"透传模式";
-        cell.accessoryType = UITableViewCellAccessoryDetailButton;
+        cell.titleLabel.text = @"透传模式";
+        cell.rightArrowImageView.hidden = YES;
+        cell.rightSwitch.hidden = NO;
+        cell.detailLabel.hidden = YES;
     } else {
-        cell.textLabel.text = @"关于我们";
-        cell.accessoryType = UITableViewCellAccessoryDetailButton;
+        cell.titleLabel.text = @"关于我们";
+        cell.rightArrowImageView.hidden = NO;
+        cell.rightSwitch.hidden = YES;
+        cell.detailLabel.hidden = YES;
     }
     return cell;
 }
