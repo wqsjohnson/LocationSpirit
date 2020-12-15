@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,7 @@
 		869DF16B257630A100D916EC /* WQSLocationSpiritTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF16A257630A100D916EC /* WQSLocationSpiritTests.m */; };
 		869DF176257630A100D916EC /* WQSLocationSpiritUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF175257630A100D916EC /* WQSLocationSpiritUITests.m */; };
 		869DF1A02576452000D916EC /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DF19F2576452000D916EC /* SearchViewController.m */; };
+		86F17845258854C00034AB2E /* UIView+ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F17843258854C00034AB2E /* UIView+ActivityIndicatorView.m */; };
 		86FC870C2576495E003FAAF1 /* UIDevice+MC.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FC870B2576495E003FAAF1 /* UIDevice+MC.m */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,9 @@
 		869DF177257630A100D916EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		869DF19E2576452000D916EC /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		869DF19F2576452000D916EC /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		86F17843258854C00034AB2E /* UIView+ActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ActivityIndicatorView.m"; sourceTree = "<group>"; };
+		86F17844258854C00034AB2E /* UIView+ActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ActivityIndicatorView.h"; sourceTree = "<group>"; };
+		86F1785D2588576C0034AB2E /* FuncMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FuncMacro.h; sourceTree = "<group>"; };
 		86FC86CF257648A1003FAAF1 /* CommonConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonConfig.h; sourceTree = "<group>"; };
 		86FC870A2576495E003FAAF1 /* UIDevice+MC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIDevice+MC.h"; sourceTree = "<group>"; };
 		86FC870B2576495E003FAAF1 /* UIDevice+MC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+MC.m"; sourceTree = "<group>"; };
@@ -136,25 +140,16 @@
 		869DF14D2576309F00D916EC /* WQSLocationSpirit */ = {
 			isa = PBXGroup;
 			children = (
-				869DF14E2576309F00D916EC /* AppDelegate.h */,
-				869DF14F2576309F00D916EC /* AppDelegate.m */,
-				86FC870A2576495E003FAAF1 /* UIDevice+MC.h */,
-				86FC870B2576495E003FAAF1 /* UIDevice+MC.m */,
-				861B4D3E257739910031842A /* WQSAnnotionModel.h */,
-				861B4D3F257739910031842A /* WQSAnnotionModel.m */,
-				869DF1542576309F00D916EC /* ViewController.h */,
-				869DF1552576309F00D916EC /* ViewController.m */,
+				86F17850258855860034AB2E /* Search */,
+				86F1784E2588555F0034AB2E /* GPS */,
+				86F1784D258855540034AB2E /* Location */,
+				86F1784C258855450034AB2E /* Satnav */,
+				86F1784B2588552F0034AB2E /* Setting */,
+				86F1784A258855140034AB2E /* Home */,
+				86F17849258854FA0034AB2E /* AppRun */,
+				86F17842258854AC0034AB2E /* Categories */,
 				86FC86CF257648A1003FAAF1 /* CommonConfig.h */,
-				869DF19E2576452000D916EC /* SearchViewController.h */,
-				869DF19F2576452000D916EC /* SearchViewController.m */,
-				8666CFE6258755B7005733ED /* SettingViewController.h */,
-				8666CFE7258755B7005733ED /* SettingViewController.m */,
-				8666CFEF25875688005733ED /* SatnavViewController.h */,
-				8666CFF025875688005733ED /* SatnavViewController.m */,
-				8666CFF5258756B6005733ED /* LocationViewController.h */,
-				8666CFF6258756B6005733ED /* LocationViewController.m */,
-				8666CFFE258756F5005733ED /* GPSViewController.h */,
-				8666CFFF258756F5005733ED /* GPSViewController.m */,
+				86F1785D2588576C0034AB2E /* FuncMacro.h */,
 				869DF15A257630A100D916EC /* Assets.xcassets */,
 				869DF15C257630A100D916EC /* LaunchScreen.storyboard */,
 				869DF15F257630A100D916EC /* Info.plist */,
@@ -181,13 +176,88 @@
 			path = WQSLocationSpiritUITests;
 			sourceTree = "<group>";
 		};
+		86F17842258854AC0034AB2E /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				86FC870A2576495E003FAAF1 /* UIDevice+MC.h */,
+				86FC870B2576495E003FAAF1 /* UIDevice+MC.m */,
+				86F17844258854C00034AB2E /* UIView+ActivityIndicatorView.h */,
+				86F17843258854C00034AB2E /* UIView+ActivityIndicatorView.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		86F17849258854FA0034AB2E /* AppRun */ = {
+			isa = PBXGroup;
+			children = (
+				869DF14E2576309F00D916EC /* AppDelegate.h */,
+				869DF14F2576309F00D916EC /* AppDelegate.m */,
+			);
+			path = AppRun;
+			sourceTree = "<group>";
+		};
+		86F1784A258855140034AB2E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				869DF1542576309F00D916EC /* ViewController.h */,
+				869DF1552576309F00D916EC /* ViewController.m */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		86F1784B2588552F0034AB2E /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				8666CFE6258755B7005733ED /* SettingViewController.h */,
+				8666CFE7258755B7005733ED /* SettingViewController.m */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		86F1784C258855450034AB2E /* Satnav */ = {
+			isa = PBXGroup;
+			children = (
+				8666CFEF25875688005733ED /* SatnavViewController.h */,
+				8666CFF025875688005733ED /* SatnavViewController.m */,
+			);
+			path = Satnav;
+			sourceTree = "<group>";
+		};
+		86F1784D258855540034AB2E /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				861B4D3E257739910031842A /* WQSAnnotionModel.h */,
+				861B4D3F257739910031842A /* WQSAnnotionModel.m */,
+				8666CFF5258756B6005733ED /* LocationViewController.h */,
+				8666CFF6258756B6005733ED /* LocationViewController.m */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		86F1784E2588555F0034AB2E /* GPS */ = {
+			isa = PBXGroup;
+			children = (
+				8666CFFE258756F5005733ED /* GPSViewController.h */,
+				8666CFFF258756F5005733ED /* GPSViewController.m */,
+			);
+			path = GPS;
+			sourceTree = "<group>";
+		};
+		86F17850258855860034AB2E /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				869DF19E2576452000D916EC /* SearchViewController.h */,
+				869DF19F2576452000D916EC /* SearchViewController.m */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		C309F53AEC90257C9A2D50F9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				B6C11A79B0112E33B73C3E59 /* Pods-WQSLocationSpirit.debug.xcconfig */,
 				7D4593C52FDCF24D7BF3EC8D /* Pods-WQSLocationSpirit.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -372,6 +442,7 @@
 				8666CFF125875688005733ED /* SatnavViewController.m in Sources */,
 				869DF1A02576452000D916EC /* SearchViewController.m in Sources */,
 				869DF161257630A100D916EC /* main.m in Sources */,
+				86F17845258854C00034AB2E /* UIView+ActivityIndicatorView.m in Sources */,
 				8666D000258756F5005733ED /* GPSViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
