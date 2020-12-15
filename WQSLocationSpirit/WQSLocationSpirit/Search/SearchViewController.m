@@ -6,7 +6,12 @@
 //
 
 #import "SearchViewController.h"
+#import <AMapFoundationKit/AMapFoundationKit.h>
+#import <AMapSearchKit/AMapSearchKit.h>
 #import "CommonConfig.h"
+#import "SearchPlaceModel.h"
+#import "UIView+ActivityIndicatorView.h"
+#import "CommonMapSettingManager.h"
 
 @interface SearchLocationCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *locationImageView;
@@ -37,10 +42,11 @@
 }
 
 @end
-@interface SearchViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface SearchViewController ()<UITableViewDelegate,UITableViewDataSource,AMapSearchDelegate,UITextFieldDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *navigationBar;
 @property (nonatomic, strong) NSMutableArray *searchResults;
+@property (nonatomic, strong) AMapSearchAPI *search;
 @end
 
 @implementation SearchViewController
@@ -55,6 +61,14 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+        
+    } else {
+        self.search = [[AMapSearchAPI alloc] init];
+        self.search.delegate = self;
+    }
+    
     [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.tableView];
 }
@@ -109,9 +123,9 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark UITableViewDelegate, UITableViewDataSource;
+#pragma mark UITableViewDelegate, UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return self.searchResults.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -125,7 +139,8 @@
         cell = [[SearchLocationCell alloc] initWithStyle:UITableViewCellStyleDefault
                                          reuseIdentifier:cellID];
     }
-    cell.locationLabel.text = @"搜索定位位置";
+    SearchPlaceModel *model = [self.searchResults objectAtIndex:indexPath.row];
+    cell.locationLabel.text = model.name;
     return cell;
 }
 
@@ -137,5 +152,36 @@
     }
     [self dismissViewControllerAnimated:YES
                              completion:nil];
+}
+
+#pragma mark AMapSearchDelegate
+- (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
+    [self.view hiddenActivity];
+    [self.view promptMessage:@"搜索失败"];
+}
+
+- (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
+    [self.view hiddenActivity];
+    [self.searchResults removeAllObjects];
+    for (AMapPOI *poi in response.pois) {
+        SearchPlaceModel *model = SearchPlaceModel.new;
+        model.name = poi.name;
+        model.latitude = poi.location.latitude;
+        model.longitude = poi.location.longitude;
+        [self.searchResults addObject:model];
+    }
+    [self.tableView reloadData];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+        
+    } else {
+        [self.view showActivityViewWithTitle:@"搜索中..."];
+        AMapPOIKeywordsSearchRequest *request = AMapPOIKeywordsSearchRequest.new;
+        request.keywords = textField.text;
+        [self.search AMapPOIKeywordsSearch:request];
+    }
+    return YES;
 }
 @end
