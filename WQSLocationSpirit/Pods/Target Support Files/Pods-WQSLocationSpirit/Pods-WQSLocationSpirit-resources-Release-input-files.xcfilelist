@@ -1,4 +1,2 @@
 ${PODS_ROOT}/Target Support Files/Pods-WQSLocationSpirit/Pods-WQSLocationSpirit-resources.sh
 ${PODS_ROOT}/AMap2DMap/MAMapKit.framework/AMap.bundle
-${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMapNavi.bundle
-${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMap.bundle

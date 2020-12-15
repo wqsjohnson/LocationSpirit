@@ -98,13 +98,9 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/AMap2DMap/MAMapKit.framework/AMap.bundle"
-  install_resource "${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMapNavi.bundle"
-  install_resource "${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMap.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/AMap2DMap/MAMapKit.framework/AMap.bundle"
-  install_resource "${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMapNavi.bundle"
-  install_resource "${PODS_ROOT}/AMapNavi/AMapNaviKit.framework/AMap.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
