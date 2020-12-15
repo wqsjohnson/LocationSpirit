@@ -8,6 +8,11 @@
 #import "ViewController.h"
 #import "CommonConfig.h"
 #import "Masonry.h"
+//ctrl
+#import "SettingViewController.h"
+#import "LocationViewController.h"
+#import "GPSViewController.h"
+#import "SatnavViewController.h"
 
 @interface ViewController ()
 @end
@@ -83,7 +88,7 @@
             make.left.mas_equalTo(self.view).offset(15);
             make.right.mas_equalTo(self.view).offset(-15);
             make.height.mas_equalTo(120);
-            make.top.mas_equalTo(detailLabel).offset(i * (135) + 200);
+            make.bottom.mas_equalTo(self.view).offset(-(i * (135) + 50));
         }];
         
         //图片
@@ -155,6 +160,8 @@
 }
 
 - (void)toSetting:(UIButton *)sender {
-    
+    SettingViewController *settingCtrl = SettingViewController.new;
+    [self.navigationController pushViewController:settingCtrl
+                                         animated:YES];
 }
 @end
