@@ -8,14 +8,17 @@
 #import "SatnavViewController.h"
 #import <MAMapKit/MAMapKit.h>
 #import <MapKit/MapKit.h>
+#import <AMapSearchKit/AMapSearchKit.h>
 #import "CommonConfig.h"
 #import "Masonry.h"
 #import "CommonMapSettingManager.h"
 #import "SearchViewController.h"
+#import "UIView+ActivityIndicatorView.h"
 
-@interface SatnavViewController ()<MKMapViewDelegate,MAMapViewDelegate>
+@interface SatnavViewController ()<MKMapViewDelegate,MAMapViewDelegate,AMapSearchDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MAMapView *maMapView;
+@property (nonatomic, strong) AMapSearchAPI *aMapSearch;
 @property (nonatomic, strong) UIView *navigationBar;
 @property (nonatomic, weak) UILabel *startPlace;
 @property (nonatomic, weak) UILabel *endPlace;
@@ -27,20 +30,18 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.navigationBar];
-    [self.navigationBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.mas_equalTo(self.view);
-        make.height.mas_equalTo(kNavigationBarHeight + 80);
-    }];
     if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
         [self.view addSubview:self.mapView];
     } else {
         [self.view addSubview:self.maMapView];
+        self.aMapSearch = [[AMapSearchAPI alloc] init];
+        self.aMapSearch.delegate = self;
     }
 }
 
 - (UIView *)navigationBar {
     if (nil == _navigationBar) {
-        _navigationBar = UIView.new;
+        _navigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIDeviceScreenWidth, kNavigationBarHeight + 80)];
         _navigationBar.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
         
         UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -111,7 +112,7 @@
         UIScrollView *typeScroller = [[UIScrollView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight + 40, UIDeviceScreenWidth, 40)];
         [_navigationBar addSubview:typeScroller];
         
-        CGFloat typeBtnWidth = 40;
+        CGFloat typeBtnWidth = 80;
         CGFloat typeBtnSeperate = 10;
         CGFloat typeBtnHeight = 30;
         NSArray *typeDatas = @[@"驾车",@"步行",@"公交",@"骑行"];
@@ -122,17 +123,14 @@
             typeBtn.tag = i + 100;
             typeBtn.layer.borderColor = [[UIColor blueColor] colorWithAlphaComponent:0.6].CGColor;
             [typeBtn setTitle:typeDatas[i] forState:UIControlStateNormal];
-            [typeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [typeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+            [typeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [typeBtn setBackgroundColor:[UIColor whiteColor]];
-            typeBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
+            typeBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
             [typeBtn addTarget:self
                         action:@selector(typeSelectAction:)
               forControlEvents:UIControlEventTouchDown];
-            typeScroller.frame = CGRectMake(10 + i * (typeBtnWidth + typeBtnSeperate), 5, typeBtnWidth, typeBtnHeight);
-            if (i == 0) {
-                [typeBtn setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
-                self.selectBtn = typeBtn;
-            }
+            typeBtn.frame = CGRectMake(10 + i * (typeBtnWidth + typeBtnSeperate), 5, typeBtnWidth, typeBtnHeight);
             [typeScroller addSubview:typeBtn];
         }
     }
@@ -188,12 +186,74 @@
 }
 
 - (void)typeSelectAction:(UIButton *)sender {
+    if ([self.startPlace.text isEqualToString:@"请输入起始位置"]) {
+        [self.view promptMessage:@"请输入起始位置"];
+        return;
+    }
+    if ([self.endPlace.text isEqualToString:@"请输入起始位置"]) {
+        [self.view promptMessage:@"请输入起始位置"];
+        return;
+    }
     if (self.selectBtn == sender) {
         return;
     }
     [self.selectBtn setBackgroundColor:[UIColor whiteColor]];
+    self.selectBtn.selected = NO;
     self.selectBtn = sender;
+    self.selectBtn.selected = YES;
     [self.selectBtn setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
+}
+
+//苹果原生地图路线规划
+- (void)mapRequest {
+    //1.创建方向请求
+    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
+    request.requestsAlternateRoutes = YES;//是否需要多条可用的路线
+    request.transportType = MKDirectionsTransportTypeAutomobile;
+    //2.设置起点
+    MKPlacemark *startPlace = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0)];
+    request.source = [[MKMapItem alloc] initWithPlacemark:startPlace];
+    
+    //3.设置终点
+    MKPlacemark *endPlace = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(0, 0)];
+    request.destination = [[MKMapItem alloc] initWithPlacemark:endPlace];
+    
+    //4.创建方向对象
+    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
+    //5.计算所有路线
+    __weak typeof(self) weakSelf = self;
+    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            [weakSelf.view promptMessage:@"搜索失败"];
+            return;
+        }
+    }];
+}
+
+//高德驾车路线规划
+- (void)_drivingRouteSearch {
+    AMapDrivingRouteSearchRequest *navi = [[AMapDrivingRouteSearchRequest alloc] init];
+    navi.requireExtension = YES;
+    navi.strategy = 5;
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:0
+                                           longitude:0];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:0
+                                                longitude:0];
+    [self.aMapSearch AMapDrivingRouteSearch:navi];
+}
+
+/* 路径规划搜索回调. */
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
+    if (response.route == nil) {
+        return;
+    }
+   //解析response获取路径信息，具体解析见 Demo
+}
+
+- (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
+    [self.view promptMessage:@"搜索失败"];
 }
 
 - (void)backAcvtion:(UIButton *)sender {
