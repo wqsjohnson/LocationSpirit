@@ -8,6 +8,7 @@
 #import "SearchViewController.h"
 #import <AMapFoundationKit/AMapFoundationKit.h>
 #import <AMapSearchKit/AMapSearchKit.h>
+#import <MapKit/MapKit.h>
 #import "CommonConfig.h"
 #import "SearchPlaceModel.h"
 #import "UIView+ActivityIndicatorView.h"
@@ -218,10 +219,35 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.view showActivityViewWithTitle:@"搜索中..."];
     if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
-        
+        // 1. 创建一个POI请求
+        MKLocalSearchRequest *request = [[MKLocalSearchRequest alloc]init];
+        // 2.1 设置请求检索的关键字
+        request.naturalLanguageQuery = self.searchTextField.text;
+        // 3. 根据请求创建检索对象
+        MKLocalSearch *search = [[MKLocalSearch alloc]initWithRequest:request];
+        // 4. 使用检索对象, 检索对象
+        __weak typeof(self) weakSelf = self;
+        [search startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
+            [weakSelf.view hiddenActivity];
+            if (error == nil) {
+                [weakSelf.searchResults removeAllObjects];
+                // 响应对象MKLocalSearchResponse,里面存储着检索出来的"地图项",每个地图项中有包含位置信息, 商家信息等
+                for (MKMapItem * mapItem in response.mapItems) {
+                    SearchPlaceModel *model = SearchPlaceModel.new;
+                    model.name = mapItem.name;
+                    model.address = mapItem.placemark.title;
+                    model.latitude = mapItem.placemark.coordinate.latitude;
+                    model.longitude = mapItem.placemark.coordinate.longitude;
+                    [weakSelf.searchResults addObject:model];
+                }
+                [weakSelf.tableView reloadData];
+            } else {
+                [weakSelf.view promptMessage:@"搜索失败"];
+            }
+        }];
     } else {
-        [self.view showActivityViewWithTitle:@"搜索中..."];
         AMapPOIKeywordsSearchRequest *request = AMapPOIKeywordsSearchRequest.new;
         request.keywords = textField.text;
         [self.search AMapPOIKeywordsSearch:request];

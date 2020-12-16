@@ -84,7 +84,6 @@
         _mapView.scrollEnabled = YES;
         _mapView.rotateEnabled = NO;
         _mapView.pitchEnabled = NO;
-        
         // 是否显示指南针（iOS9.0）
         _mapView.showsCompass = NO;
         // 是否显示比例尺（iOS9.0）
@@ -93,11 +92,8 @@
         _mapView.showsTraffic = YES;
         // 是否显示建筑物
         _mapView.showsBuildings = YES;
-        
         _mapView.userTrackingMode = MKUserTrackingModeFollowWithHeading;
-        
         _mapView.delegate = self;
-        
         _mapView.showsUserLocation = YES;
     }
     return _mapView;
