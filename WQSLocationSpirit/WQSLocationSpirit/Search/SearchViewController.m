@@ -12,10 +12,12 @@
 #import "SearchPlaceModel.h"
 #import "UIView+ActivityIndicatorView.h"
 #import "CommonMapSettingManager.h"
+#import "Masonry.h"
 
 @interface SearchLocationCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *locationImageView;
 @property (nonatomic, strong) UILabel *locationLabel;
+@property (nonatomic, strong) UILabel *locationDetailLabel;
 @end
 
 @implementation SearchLocationCell
@@ -27,18 +29,47 @@
 }
 
 - (void)_initUI {
-    self.locationImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 15, 20, 20)];
+    self.locationImageView = UIImageView.new;
     self.locationImageView.image = [UIImage imageNamed:@"location_user_panel"];
     [self.contentView addSubview:self.locationImageView];
+    [self.locationImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.contentView);
+        make.left.mas_equalTo(self.contentView).offset(15);
+        make.size.mas_equalTo(CGSizeMake(20, 20));
+    }];
     
-    self.locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, UIDeviceScreenWidth - 100, 50)];
+    UIView *rightContentView = UIView.new;
+    [self.contentView addSubview:rightContentView];
+    [rightContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.contentView).offset(-15);
+        make.left.mas_equalTo(self.locationImageView.mas_right).offset(15);
+    }];
+    
+    self.locationLabel = UILabel.new;
     self.locationLabel.font = [UIFont systemFontOfSize:13];
     self.locationLabel.textColor = [UIColor lightGrayColor];
-    [self.contentView addSubview:self.locationLabel];
+    [rightContentView addSubview:self.locationLabel];
+    [self.locationLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.mas_equalTo(rightContentView);
+    }];
     
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 49.5, UIDeviceScreenWidth, 0.5)];
+    self.locationDetailLabel = UILabel.new;
+    self.locationDetailLabel.font = [UIFont systemFontOfSize:13];
+    self.locationDetailLabel.textColor = [UIColor lightGrayColor];
+    [rightContentView addSubview:self.locationDetailLabel];
+    [self.locationDetailLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.mas_equalTo(rightContentView);
+        make.top.mas_equalTo(self.locationLabel.mas_bottom).offset(5);
+    }];
+    
+    UIView *line = UIView.new;
     line.backgroundColor = [UIColor lightGrayColor];
     [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.mas_equalTo(self.contentView);
+        make.height.mas_equalTo(0.5);
+    }];
 }
 
 @end
@@ -47,6 +78,7 @@
 @property (nonatomic, strong) UIView *navigationBar;
 @property (nonatomic, strong) NSMutableArray *searchResults;
 @property (nonatomic, strong) AMapSearchAPI *search;
+@property (nonatomic, weak) UITextField *searchTextField;
 @end
 
 @implementation SearchViewController
@@ -71,6 +103,8 @@
     
     [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.tableView];
+    
+    [self.searchTextField becomeFirstResponder];
 }
 
 - (UIView *)navigationBar {
@@ -90,10 +124,13 @@
         [searchView addSubview:searchImageView];
         
         UITextField *searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(40, 0, searchView.frame.size.width - 50, 30)];
+        searchTextField.delegate = self;
+        searchTextField.returnKeyType = UIReturnKeySearch;
         searchTextField.placeholder = @"输入地名进行搜索";
         searchTextField.textColor = [UIColor blackColor];
         searchTextField.font = [UIFont systemFontOfSize:13];
         [searchView addSubview:searchTextField];
+        self.searchTextField = searchTextField;
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
         cancelButton.frame = CGRectMake(UIDeviceScreenWidth - kNavigationBarContentHeight, kStatusGAP, kNavigationBarContentHeight, kNavigationBarContentHeight);
@@ -124,6 +161,10 @@
 }
 
 #pragma mark UITableViewDelegate, UITableViewDataSource
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.searchTextField resignFirstResponder];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.searchResults.count;
 }
@@ -141,13 +182,15 @@
     }
     SearchPlaceModel *model = [self.searchResults objectAtIndex:indexPath.row];
     cell.locationLabel.text = model.name;
+    cell.locationDetailLabel.text = model.address;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    SearchPlaceModel *model = [self.searchResults objectAtIndex:indexPath.row];
     if (self.selectLocationComplete) {
-        CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(39.9,116.4);
+        CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(model.latitude,model.longitude);
         self.selectLocationComplete(locationCoordinate);
     }
     [self dismissViewControllerAnimated:YES
@@ -166,6 +209,7 @@
     for (AMapPOI *poi in response.pois) {
         SearchPlaceModel *model = SearchPlaceModel.new;
         model.name = poi.name;
+        model.address = poi.address;
         model.latitude = poi.location.latitude;
         model.longitude = poi.location.longitude;
         [self.searchResults addObject:model];

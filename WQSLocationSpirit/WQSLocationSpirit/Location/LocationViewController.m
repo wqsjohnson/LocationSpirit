@@ -27,13 +27,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.navigationBar];
+    self.annotionModel = WQSAnnotionModel.new;
     if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
         [self.view addSubview:self.mapView];
+        [self.mapView addAnnotation:self.annotionModel];
+        [self.annotionModel setCoordinate:self.mapView.centerCoordinate];
     } else {
         [self.view addSubview:self.maMapView];
+        [self.maMapView addAnnotation:self.annotionModel];
+        [self.annotionModel setCoordinate:self.maMapView.centerCoordinate];
     }
-    self.annotionModel = WQSAnnotionModel.new;
-    [self.mapView addAnnotation:self.annotionModel];
     [self.view addSubview:self.sureButton];
 }
 
@@ -138,7 +141,11 @@
     __weak typeof(self) weakSelf = self;
     SearchViewController *searchVC = [SearchViewController new];
     searchVC.selectLocationComplete = ^(CLLocationCoordinate2D locationCoordinate) {
-        [weakSelf.mapView setCenterCoordinate:locationCoordinate animated:NO];
+        if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+            [weakSelf.mapView setCenterCoordinate:locationCoordinate animated:NO];
+        } else {
+            [weakSelf.maMapView setCenterCoordinate:locationCoordinate animated:NO];
+        }
     };
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
     navigation.modalPresentationStyle = UIModalPresentationFullScreen;

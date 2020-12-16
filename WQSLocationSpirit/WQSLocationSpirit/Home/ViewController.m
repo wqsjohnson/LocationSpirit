@@ -13,6 +13,8 @@
 #import "LocationViewController.h"
 #import "GPSViewController.h"
 #import "SatnavViewController.h"
+//model
+#import "CommonMapSettingManager.h"
 
 @interface ViewController ()
 @end
@@ -22,6 +24,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self _initUI];
+    
+    id mapType = [[NSUserDefaults standardUserDefaults] objectForKey:@"MapType"];
+    if (mapType) {
+        CommonMapSettingManager.manager.type = [mapType integerValue];
+    }
 }
 
 - (void)_initUI {

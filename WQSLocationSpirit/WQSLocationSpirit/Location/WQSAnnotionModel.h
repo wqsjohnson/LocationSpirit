@@ -7,10 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import <MAMapKit/MAMapKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WQSAnnotionModel : NSObject<MKAnnotation>
+@interface WQSAnnotionModel : NSObject<MKAnnotation,MAAnnotation>
 
 @end
 

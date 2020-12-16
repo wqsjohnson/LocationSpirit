@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SearchPlaceModel : NSObject
 ///名称
 @property (nonatomic, copy) NSString *name;
+///地址
+@property (nonatomic, copy) NSString *address;
 ///纬度（垂直方向）
 @property (nonatomic, assign) float latitude;
 ///经度（水平方向）

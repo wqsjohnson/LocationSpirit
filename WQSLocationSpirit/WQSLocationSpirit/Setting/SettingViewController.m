@@ -192,6 +192,8 @@
                 return;
             }
             CommonMapSettingManager.manager.type = LocationViewControllerTypeAMap;
+            [[NSUserDefaults standardUserDefaults] setObject:@(1) forKey:@"MapType"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             [weakSelf.tableView reloadData];
         }]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"内置地图"
@@ -201,6 +203,8 @@
                 return;
             }
             CommonMapSettingManager.manager.type = LocationViewControllerTypeSysMap;
+            [[NSUserDefaults standardUserDefaults] setObject:@(0) forKey:@"MapType"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             [weakSelf.tableView reloadData];
         }]];
 
