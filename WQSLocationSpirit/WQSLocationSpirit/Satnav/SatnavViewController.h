@@ -1,7 +1,7 @@
 //
 //  SatnavViewController.h
 //  WQSLocationSpirit
-//  导航控制器
+//  路线规划控制器
 //  Created by xtkj20180621 on 2020/12/14.
 //
 
