@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4979E4C3EDF51DE76E98F06F /* libPods-WQSLocationSpirit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C357B0A8B0744E72A0711A8 /* libPods-WQSLocationSpirit.a */; };
 		861B2C5B258B0F240011E792 /* MaMapSatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B2C5A258B0F240011E792 /* MaMapSatnavViewController.m */; };
+		861B2C67258B4FE50011E792 /* LocationCollectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B2C66258B4FE50011E792 /* LocationCollectViewController.m */; };
 		861B4D40257739910031842A /* WQSAnnotionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B4D3F257739910031842A /* WQSAnnotionModel.m */; };
 		8666CFE8258755B7005733ED /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFE7258755B7005733ED /* SettingViewController.m */; };
 		8666CFF125875688005733ED /* SatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF025875688005733ED /* SatnavViewController.m */; };
@@ -50,6 +51,8 @@
 		7D4593C52FDCF24D7BF3EC8D /* Pods-WQSLocationSpirit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQSLocationSpirit.release.xcconfig"; path = "Target Support Files/Pods-WQSLocationSpirit/Pods-WQSLocationSpirit.release.xcconfig"; sourceTree = "<group>"; };
 		861B2C59258B0F240011E792 /* MaMapSatnavViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaMapSatnavViewController.h; sourceTree = "<group>"; };
 		861B2C5A258B0F240011E792 /* MaMapSatnavViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MaMapSatnavViewController.m; sourceTree = "<group>"; };
+		861B2C65258B4FE50011E792 /* LocationCollectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationCollectViewController.h; sourceTree = "<group>"; };
+		861B2C66258B4FE50011E792 /* LocationCollectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationCollectViewController.m; sourceTree = "<group>"; };
 		861B4D3E257739910031842A /* WQSAnnotionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WQSAnnotionModel.h; sourceTree = "<group>"; };
 		861B4D3F257739910031842A /* WQSAnnotionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WQSAnnotionModel.m; sourceTree = "<group>"; };
 		8666CFE6258755B7005733ED /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -248,6 +251,8 @@
 				861B4D3F257739910031842A /* WQSAnnotionModel.m */,
 				8666CFF5258756B6005733ED /* LocationViewController.h */,
 				8666CFF6258756B6005733ED /* LocationViewController.m */,
+				861B2C65258B4FE50011E792 /* LocationCollectViewController.h */,
+				861B2C66258B4FE50011E792 /* LocationCollectViewController.m */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -461,6 +466,7 @@
 				8666CFE8258755B7005733ED /* SettingViewController.m in Sources */,
 				86FC870C2576495E003FAAF1 /* UIDevice+MC.m in Sources */,
 				8666CFF125875688005733ED /* SatnavViewController.m in Sources */,
+				861B2C67258B4FE50011E792 /* LocationCollectViewController.m in Sources */,
 				869DF1A02576452000D916EC /* SearchViewController.m in Sources */,
 				869268E12588A0F7007CA29A /* AboutUsViewController.m in Sources */,
 				869268F32588C425007CA29A /* SearchPlaceModel.m in Sources */,

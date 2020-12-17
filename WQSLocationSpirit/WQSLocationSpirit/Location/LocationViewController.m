@@ -12,8 +12,11 @@
 #import "CommonMapSettingManager.h"
 //ctrl
 #import "SearchViewController.h"
+#import "LocationCollectViewController.h"
 //model
 #import "WQSAnnotionModel.h"
+//category
+#import "UIView+ActivityIndicatorView.h"
 @interface LocationViewController ()<MKMapViewDelegate,MAMapViewDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MAMapView *maMapView;
@@ -38,6 +41,17 @@
         [self.annotionModel setCoordinate:self.maMapView.centerCoordinate];
     }
     [self.view addSubview:self.sureButton];
+    
+    UIButton *collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    collectButton.frame = CGRectMake(20, kNavigationBarHeight + 20, 40, 40);
+    collectButton.layer.cornerRadius = 20;
+    collectButton.layer.masksToBounds = YES;
+    [collectButton setBackgroundColor:[UIColor whiteColor]];
+    [collectButton setImage:[UIImage imageNamed:@"collect_public"] forState:UIControlStateNormal];
+    [collectButton addTarget:self
+                      action:@selector(collectAction:)
+            forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:collectButton];
 }
 
 - (UIView *)navigationBar {
@@ -72,6 +86,15 @@
         searchLabel.textColor = [UIColor lightGrayColor];
         searchLabel.font = [UIFont systemFontOfSize:13];
         [searchView addSubview:searchLabel];
+        
+        UIButton *collectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        collectBtn.frame = CGRectMake(UIDeviceScreenWidth - kNavigationBarContentHeight, kStatusGAP, kNavigationBarContentHeight, kNavigationBarContentHeight);
+        [collectBtn setImage:[UIImage imageNamed:@"home_room_collected"]
+                    forState:UIControlStateNormal];
+        [_navigationBar addSubview:collectBtn];
+        [collectBtn addTarget:self
+                    action:@selector(toCollectAcvtion:)
+          forControlEvents:UIControlEventTouchUpInside];
     }
     return _navigationBar;
 }
@@ -131,6 +154,54 @@
 
 - (void)sureAction:(UIButton *)btn {
     
+}
+
+- (void)toCollectAcvtion:(UIButton *)btn {
+    __weak typeof(self) weakSelf = self;
+    LocationCollectViewController *collectVC = [LocationCollectViewController new];
+    collectVC.selectLocationComplete = ^(CLLocationCoordinate2D locationCoordinate) {
+        if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+            [weakSelf.mapView setCenterCoordinate:locationCoordinate animated:NO];
+        } else {
+            [weakSelf.maMapView setCenterCoordinate:locationCoordinate animated:NO];
+        }
+    };
+    [self.navigationController pushViewController:collectVC animated:YES];
+}
+
+- (void)collectAction:(UIButton *)btn {
+    [self.view showActivityViewWithTitle:@"收藏中..."];
+    CLGeocoder *clGeoCoder = [[CLGeocoder alloc] init];
+    CLLocation *location;
+    if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+        location = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
+    } else {
+        location = [[CLLocation alloc] initWithLatitude:self.maMapView.centerCoordinate.latitude longitude:self.maMapView.centerCoordinate.longitude];
+    }
+    __weak typeof(self) weakSelf = self;
+    [clGeoCoder reverseGeocodeLocation:location completionHandler: ^(NSArray *placemarks,NSError *error) {
+        if (error) {
+            [self.view hiddenActivityWithTitle:@"收藏失败"];
+            return;
+        }
+        CLPlacemark *placeMark = [placemarks objectAtIndex:0];
+        NSString *name = [NSString stringWithFormat:@"%@ %@ %@",placeMark.locality,placeMark.subLocality,placeMark.thoroughfare];
+        NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/collectDatas.plist"];
+        NSArray *dataArr = [NSArray arrayWithContentsOfFile:filePath];
+        NSDictionary *dic = @{@"name":name,@"latitude":@(location.coordinate.latitude),@"longitude":@(location.coordinate.longitude)};
+        if (dataArr) {
+            NSMutableArray *newDataArry = [NSMutableArray array];
+            [newDataArry addObjectsFromArray:dataArr];
+            [newDataArry addObject:dic];
+            dataArr = newDataArry;
+        } else {
+            dataArr = @[dic];
+        }
+        BOOL flag = [dataArr writeToFile:filePath atomically:YES];
+        if (flag) {
+            [weakSelf.view hiddenActivityWithTitle:@"收藏成功"];
+        }
+    }];
 }
 
 - (void)searchAction {

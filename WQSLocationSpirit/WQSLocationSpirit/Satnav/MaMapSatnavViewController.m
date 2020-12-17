@@ -143,6 +143,7 @@
 - (MAMapView *)maMapView {
     if (nil == _maMapView) {
         _maMapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight + 80, UIDeviceScreenWidth, UIDeviceScreenHeight - kNavigationBarHeight - 80)];
+        _maMapView.zoomLevel = 15;
         _maMapView.delegate = self;
     }
     return _maMapView;
@@ -284,7 +285,7 @@
         polylineRenderer.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
         polylineRenderer.lineJoin = kCGLineJoinRound;
         polylineRenderer.lineCap  = kCGLineCapRound;
-        polylineRenderer.lineWidth = 5;
+        polylineRenderer.lineWidth = 15;
             
         return polylineRenderer;
     }

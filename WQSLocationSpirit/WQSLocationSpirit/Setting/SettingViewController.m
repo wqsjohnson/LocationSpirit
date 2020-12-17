@@ -10,6 +10,7 @@
 #import "CommonMapSettingManager.h"
 #import "CommonConfig.h"
 #import "Masonry.h"
+#import <NetworkExtension/NetworkExtension.h>
 
 @interface SettingCell : UITableViewCell
 @property (nonatomic, strong) UIImageView *rightArrowImageView;
@@ -66,6 +67,10 @@
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(self.contentView);
         make.height.mas_equalTo(0.5);
+    }];
+    
+    [NEVPNManager.sharedManager loadFromPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
+                
     }];
 }
 
