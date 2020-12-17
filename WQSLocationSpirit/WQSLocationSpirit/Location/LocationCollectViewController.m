@@ -163,7 +163,7 @@
     
     NSDictionary *dic = [self.collectDatas objectAtIndex:indexPath.row];
     cell.locationLabel.text = [dic objectForKey:@"name"];
-    cell.locationDetailLabel.text = [NSString stringWithFormat:@"经度:%@ 纬度:%@",[dic objectForKey:@"latitude"],[dic objectForKey:@"longitude"]];
+    cell.locationDetailLabel.text = [NSString stringWithFormat:@"经度:%.2f 纬度:%.2f",[[dic objectForKey:@"latitude"] doubleValue],[[dic objectForKey:@"longitude"] doubleValue]];
     return cell;
 }
 
@@ -239,7 +239,7 @@
                                animated:YES
                              completion:nil];
     }];
-    editAction.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.6];
+    editAction.backgroundColor = [UIColor blueColor];
     
     UISwipeActionsConfiguration *swipeActionsConfiguration = [UISwipeActionsConfiguration configurationWithActions:@[deleteAction,editAction]];
     return swipeActionsConfiguration;
