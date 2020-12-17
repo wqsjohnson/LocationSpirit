@@ -1,20 +1,21 @@
 //
-//  SatnavViewController.m
+//  MaMapSatnavViewController.m
 //  WQSLocationSpirit
 //
-//  Created by xtkj20180621 on 2020/12/14.
+//  Created by xtkj20180621 on 2020/12/17.
 //
 
-#import "SatnavViewController.h"
-#import <MapKit/MapKit.h>
+#import "MaMapSatnavViewController.h"
+#import <MAMapKit/MAMapKit.h>
+#import <AMapSearchKit/AMapSearchKit.h>
 #import "CommonConfig.h"
 #import "Masonry.h"
 #import "CommonMapSettingManager.h"
 #import "SearchViewController.h"
 #import "UIView+ActivityIndicatorView.h"
-
-@interface SatnavViewController ()<MKMapViewDelegate>
-@property (nonatomic, strong) MKMapView *mapView;
+@interface MaMapSatnavViewController ()<MAMapViewDelegate,AMapSearchDelegate>
+@property (nonatomic, strong) MAMapView *maMapView;
+@property (nonatomic, strong) AMapSearchAPI *aMapSearch;
 @property (nonatomic, strong) UIView *navigationBar;
 @property (nonatomic, weak) UILabel *startPlace;
 @property (nonatomic, weak) UILabel *endPlace;
@@ -24,7 +25,7 @@
 @property (nonatomic, strong) NSMutableArray *overlays;
 @end
 
-@implementation SatnavViewController
+@implementation MaMapSatnavViewController
 - (NSMutableArray *)overlays {
     if (nil == _overlays) {
         _overlays = [NSMutableArray array];
@@ -36,7 +37,9 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.navigationBar];
-    [self.view addSubview:self.mapView];
+    [self.view addSubview:self.maMapView];
+    self.aMapSearch = [[AMapSearchAPI alloc] init];
+    self.aMapSearch.delegate = self;
 }
 
 - (UIView *)navigationBar {
@@ -137,27 +140,12 @@
     return _navigationBar;
 }
 
-- (MKMapView *)mapView {
-    if (nil == _mapView) {
-        _mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight + 80, UIDeviceScreenWidth, UIDeviceScreenHeight - kNavigationBarHeight - 80)];
-        _mapView.mapType = MKMapTypeStandard;
-        _mapView.zoomEnabled = YES;
-        _mapView.scrollEnabled = YES;
-        _mapView.rotateEnabled = NO;
-        _mapView.pitchEnabled = NO;
-        // 是否显示指南针（iOS9.0）
-        _mapView.showsCompass = NO;
-        // 是否显示比例尺（iOS9.0）
-        _mapView.showsScale = YES;
-        // 是否显示交通（iOS9.0）
-        _mapView.showsTraffic = YES;
-        // 是否显示建筑物
-        _mapView.showsBuildings = YES;
-        _mapView.userTrackingMode = MKUserTrackingModeFollowWithHeading;
-        _mapView.delegate = self;
-        _mapView.showsUserLocation = YES;
+- (MAMapView *)maMapView {
+    if (nil == _maMapView) {
+        _maMapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight + 80, UIDeviceScreenWidth, UIDeviceScreenHeight - kNavigationBarHeight - 80)];
+        _maMapView.delegate = self;
     }
-    return _mapView;
+    return _maMapView;
 }
 
 - (void)tapAction:(UITapGestureRecognizer *)tap {
@@ -196,54 +184,118 @@
     self.selectBtn = sender;
     self.selectBtn.selected = YES;
     [self.selectBtn setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
-    [self mapRequest];
+    [self _drivingRouteSearch];
 }
 
-//苹果原生地图路线规划
-- (void)mapRequest {
-    //1.创建方向请求
-    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
-    request.requestsAlternateRoutes = YES;//是否需要多条可用的路线
-    request.transportType = MKDirectionsTransportTypeAutomobile;
-    //2.设置起点
-    MKPlacemark *startPlace = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
-    request.source = [[MKMapItem alloc] initWithPlacemark:startPlace];
-    
-    //3.设置终点
-    MKPlacemark *endPlace = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.endPlaceModel.latitude, self.endPlaceModel.longitude)];
-    request.destination = [[MKMapItem alloc] initWithPlacemark:endPlace];
-    
-    //4.创建方向对象
-    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
-    //5.计算所有路线
-    __weak typeof(self) weakSelf = self;
-    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
-        if (error) {
-            [weakSelf.view promptMessage:@"搜索失败"];
-            return;
-        }
-        for (MKRoute *route in response.routes) {
-            [self.mapView addOverlay:route.polyline];
-        }
-    }];
+//高德驾车路线规划
+- (void)_drivingRouteSearch {
+    AMapDrivingRouteSearchRequest *navi = [[AMapDrivingRouteSearchRequest alloc] init];
+    navi.requireExtension = YES;
+    navi.strategy = 5;
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:self.startPlaceModel.latitude
+                                           longitude:self.startPlaceModel.longitude];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:self.endPlaceModel.latitude
+                                                longitude:self.endPlaceModel.longitude];
+    [self.aMapSearch AMapDrivingRouteSearch:navi];
 }
 
-//线路的绘制
-- (MKOverlayRenderer *)mapView:(MKMapView *)mapView
-            rendererForOverlay:(id<MKOverlay>)overlay {
-    MKPolylineRenderer *renderer;
-    renderer = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    renderer.lineWidth = 5.0;
-    renderer.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
-    return renderer;
+/* 路径规划搜索回调. */
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request
+                 response:(AMapRouteSearchResponse *)response {
+    if (response.route == nil) {
+        return;
+    }
+    [self.maMapView setCenterCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
+    //移除旧折线对象
+    [self.maMapView removeOverlays:self.overlays];
+    [self.overlays removeAllObjects];
+    for (AMapPath *path in response.route.paths) {
+        //构造折线对象
+        MAPolyline *polyline = [self polylinesForPath:path];
+        [self.overlays addObject:path];
+        //添加新的遮盖，然后会触发代理方法(- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay)进行绘制
+        [self.maMapView addOverlay:polyline];
+    }
+}
+
+//路线解析
+- (MAPolyline *)polylinesForPath:(AMapPath *)path{
+    if (path == nil || path.steps.count == 0){
+        return nil;
+    }
+    NSMutableString *polylineMutableString = [@"" mutableCopy];
+    for (AMapStep *step in path.steps) {
+        [polylineMutableString appendFormat:@"%@;",step.polyline];
+    }
+    
+    NSUInteger count = 0;
+    CLLocationCoordinate2D *coordinates = [self coordinatesForString:polylineMutableString
+                                                     coordinateCount:&count
+                                                          parseToken:@";"];
+    
+    MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordinates count:count];
+    
+    (void)(free(coordinates)), coordinates = NULL;
+    return polyline;
+}
+
+//解析经纬度
+- (CLLocationCoordinate2D *)coordinatesForString:(NSString *)string
+                                 coordinateCount:(NSUInteger *)coordinateCount
+                                      parseToken:(NSString *)token{
+    if (string == nil){
+        return NULL;
+    }
+    
+    if (token == nil){
+        token = @",";
+    }
+    
+    NSString *str = @"";
+    if (![token isEqualToString:@","]){
+        str = [string stringByReplacingOccurrencesOfString:token withString:@","];
+    }else{
+        str = [NSString stringWithString:string];
+    }
+    
+    NSArray *components = [str componentsSeparatedByString:@","];
+    NSUInteger count = [components count] / 2;
+    if (coordinateCount != NULL){
+        *coordinateCount = count;
+    }
+    CLLocationCoordinate2D *coordinates = (CLLocationCoordinate2D*)malloc(count * sizeof(CLLocationCoordinate2D));
+    
+    for (int i = 0; i < count; i++){
+        coordinates[i].longitude = [[components objectAtIndex:2 * i]     doubleValue];
+        coordinates[i].latitude  = [[components objectAtIndex:2 * i + 1] doubleValue];
+    }
+    return coordinates;
+}
+
+- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay {
+    if ([overlay isKindOfClass:[MAPolyline class]]){
+        MAPolyline *polyline = (MAPolyline *)overlay;
+        MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:polyline];
+            
+        //添加纹理图片
+        //若设置了纹理图片，设置线颜色、连接类型和端点类型将无效。
+        polylineRenderer.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
+        polylineRenderer.lineJoin = kCGLineJoinRound;
+        polylineRenderer.lineCap  = kCGLineCapRound;
+        polylineRenderer.lineWidth = 5;
+            
+        return polylineRenderer;
+    }
+    return nil;
+}
+
+- (void)AMapSearchRequest:(id)request didFailWithError:(NSError *)error {
+    [self.view promptMessage:@"搜索失败"];
 }
 
 - (void)backAcvtion:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-// MKMapViewDelegate
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    
 }
 @end

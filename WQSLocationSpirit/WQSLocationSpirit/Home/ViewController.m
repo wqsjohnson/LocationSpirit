@@ -13,6 +13,7 @@
 #import "LocationViewController.h"
 #import "GPSViewController.h"
 #import "SatnavViewController.h"
+#import "MaMapSatnavViewController.h"
 //model
 #import "CommonMapSettingManager.h"
 //category
@@ -185,9 +186,15 @@
 }
 
 - (void)_toSatnav {
-    SatnavViewController *satnavVC = SatnavViewController.new;
-    [self.navigationController pushViewController:satnavVC
-                                         animated:YES];
+    if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
+        SatnavViewController *satnavVC = SatnavViewController.new;
+        [self.navigationController pushViewController:satnavVC
+                                             animated:YES];
+    } else {
+        MaMapSatnavViewController *maSatnavVC = MaMapSatnavViewController.new;
+        [self.navigationController pushViewController:maSatnavVC
+                                             animated:YES];
+    }
 }
 
 - (void)toSetting:(UIButton *)sender {

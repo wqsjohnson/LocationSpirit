@@ -10,7 +10,6 @@
 #import <AMapSearchKit/AMapSearchKit.h>
 #import <MapKit/MapKit.h>
 #import "CommonConfig.h"
-#import "SearchPlaceModel.h"
 #import "UIView+ActivityIndicatorView.h"
 #import "CommonMapSettingManager.h"
 #import "Masonry.h"
@@ -191,8 +190,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SearchPlaceModel *model = [self.searchResults objectAtIndex:indexPath.row];
     if (self.selectLocationComplete) {
-        CLLocationCoordinate2D locationCoordinate = CLLocationCoordinate2DMake(model.latitude,model.longitude);
-        self.selectLocationComplete(locationCoordinate);
+        self.selectLocationComplete(model);
     }
     [self dismissViewControllerAnimated:YES
                              completion:nil];

@@ -136,11 +136,11 @@
 - (void)searchAction {
     __weak typeof(self) weakSelf = self;
     SearchViewController *searchVC = [SearchViewController new];
-    searchVC.selectLocationComplete = ^(CLLocationCoordinate2D locationCoordinate) {
+    searchVC.selectLocationComplete = ^(SearchPlaceModel * _Nonnull placeModel) {
         if (CommonMapSettingManager.manager.type == LocationViewControllerTypeSysMap) {
-            [weakSelf.mapView setCenterCoordinate:locationCoordinate animated:NO];
+            [weakSelf.mapView setCenterCoordinate:CLLocationCoordinate2DMake(placeModel.latitude, placeModel.longitude) animated:NO];
         } else {
-            [weakSelf.maMapView setCenterCoordinate:locationCoordinate animated:NO];
+            [weakSelf.maMapView setCenterCoordinate:CLLocationCoordinate2DMake(placeModel.latitude, placeModel.longitude) animated:NO];
         }
     };
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];

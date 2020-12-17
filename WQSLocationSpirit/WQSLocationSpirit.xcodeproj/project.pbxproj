@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4979E4C3EDF51DE76E98F06F /* libPods-WQSLocationSpirit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C357B0A8B0744E72A0711A8 /* libPods-WQSLocationSpirit.a */; };
+		861B2C5B258B0F240011E792 /* MaMapSatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B2C5A258B0F240011E792 /* MaMapSatnavViewController.m */; };
 		861B4D40257739910031842A /* WQSAnnotionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B4D3F257739910031842A /* WQSAnnotionModel.m */; };
 		8666CFE8258755B7005733ED /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFE7258755B7005733ED /* SettingViewController.m */; };
 		8666CFF125875688005733ED /* SatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF025875688005733ED /* SatnavViewController.m */; };
@@ -47,6 +48,8 @@
 
 /* Begin PBXFileReference section */
 		7D4593C52FDCF24D7BF3EC8D /* Pods-WQSLocationSpirit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQSLocationSpirit.release.xcconfig"; path = "Target Support Files/Pods-WQSLocationSpirit/Pods-WQSLocationSpirit.release.xcconfig"; sourceTree = "<group>"; };
+		861B2C59258B0F240011E792 /* MaMapSatnavViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaMapSatnavViewController.h; sourceTree = "<group>"; };
+		861B2C5A258B0F240011E792 /* MaMapSatnavViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MaMapSatnavViewController.m; sourceTree = "<group>"; };
 		861B4D3E257739910031842A /* WQSAnnotionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WQSAnnotionModel.h; sourceTree = "<group>"; };
 		861B4D3F257739910031842A /* WQSAnnotionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WQSAnnotionModel.m; sourceTree = "<group>"; };
 		8666CFE6258755B7005733ED /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -232,6 +235,8 @@
 			children = (
 				8666CFEF25875688005733ED /* SatnavViewController.h */,
 				8666CFF025875688005733ED /* SatnavViewController.m */,
+				861B2C59258B0F240011E792 /* MaMapSatnavViewController.h */,
+				861B2C5A258B0F240011E792 /* MaMapSatnavViewController.m */,
 			);
 			path = Satnav;
 			sourceTree = "<group>";
@@ -449,6 +454,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				869DF1562576309F00D916EC /* ViewController.m in Sources */,
+				861B2C5B258B0F240011E792 /* MaMapSatnavViewController.m in Sources */,
 				8666CFF7258756B6005733ED /* LocationViewController.m in Sources */,
 				861B4D40257739910031842A /* WQSAnnotionModel.m in Sources */,
 				869DF1502576309F00D916EC /* AppDelegate.m in Sources */,
