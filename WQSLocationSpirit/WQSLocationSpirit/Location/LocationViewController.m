@@ -185,7 +185,19 @@
             return;
         }
         CLPlacemark *placeMark = [placemarks objectAtIndex:0];
-        NSString *name = [NSString stringWithFormat:@"%@ %@ %@",placeMark.locality,placeMark.subLocality,placeMark.thoroughfare];
+        NSString *name;
+        if (placeMark.locality.length > 0) {
+            name = [NSString stringWithFormat:@"%@",placeMark.locality];
+        }
+        if (placeMark.subLocality.length > 0) {
+            name = [NSString stringWithFormat:@" %@",placeMark.subLocality];
+        }
+        if (placeMark.thoroughfare.length > 0) {
+            name = [NSString stringWithFormat:@" %@",placeMark.thoroughfare];
+        }
+        if (name.length == 0) {
+            name = @"未知";
+        }
         NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/collectDatas.plist"];
         NSArray *dataArr = [NSArray arrayWithContentsOfFile:filePath];
         NSDictionary *dic = @{@"name":name,@"latitude":@(location.coordinate.latitude),@"longitude":@(location.coordinate.longitude)};

@@ -175,14 +175,24 @@
     if (self.selectLocationComplete) {
         self.selectLocationComplete(CLLocationCoordinate2DMake(latitude, longitude));
     }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 //多个自定义的按钮
 - (nullable UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *name = [[self.collectDatas objectAtIndex:indexPath.row] objectForKey:@"name"];
+    NSString *filePath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/collectDatas.plist"];
     __weak typeof(self) weakSelf = self;
     UIContextualAction *deleteAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"删除" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
-        
+        [weakSelf.view showActivityViewWithTitle:@"删除中..."];
+        NSMutableArray *newDataArr = [NSMutableArray arrayWithArray:weakSelf.collectDatas];
+        [newDataArr removeObjectAtIndex:indexPath.row];
+        BOOL flag = [newDataArr writeToFile:filePath atomically:YES];
+        if (flag) {
+            [weakSelf.view hiddenActivityWithTitle:@"删除成功"];
+            [weakSelf.collectDatas removeObjectAtIndex:indexPath.row];
+            [weakSelf.tableView reloadData];
+        }
     }];
     deleteAction.backgroundColor = [UIColor redColor];
     UIContextualAction *editAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:@"编辑" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
@@ -194,11 +204,24 @@
         UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定"
                                                              style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * action) {
-                                                                  //得到文本信息
-                                                                  for (UITextField *text in alert.textFields) {
-                                                                      
-                                                                  }
-                                                              }];
+            //得到文本信息
+            UITextField *textField = alert.textFields[0];
+            if (textField.text.length == 0) {
+                [weakSelf.view promptMessage:@"请输入编辑后的名称"];
+                return;
+            }
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:[weakSelf.collectDatas objectAtIndex:indexPath.row]];
+            dic[@"name"] = textField.text;
+            NSMutableArray *newDataArr = [NSMutableArray arrayWithArray:weakSelf.collectDatas];
+            [newDataArr replaceObjectAtIndex:indexPath.row withObject:dic];
+            [weakSelf.view showActivityViewWithTitle:@"修改中..."];
+            BOOL flag = [newDataArr writeToFile:filePath atomically:YES];
+            if (flag) {
+                [weakSelf.view hiddenActivityWithTitle:@"修改成功"];
+                [weakSelf.collectDatas replaceObjectAtIndex:indexPath.row withObject:dic];
+                [weakSelf.tableView reloadData];
+            }
+        }];
         
         UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"取消"
                                                                style:UIAlertActionStyleCancel
