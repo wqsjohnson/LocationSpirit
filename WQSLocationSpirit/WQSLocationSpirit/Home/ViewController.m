@@ -15,6 +15,8 @@
 #import "SatnavViewController.h"
 //model
 #import "CommonMapSettingManager.h"
+//category
+#import "UIView+ActivityIndicatorView.h"
 
 @interface ViewController ()
 @end
@@ -176,9 +178,10 @@
 }
 
 - (void)_toGPS {
-    GPSViewController *gpsVC = GPSViewController.new;
-    [self.navigationController pushViewController:gpsVC
-                                         animated:YES];
+    [self.view promptMessage:@"功能暂未开放"];
+//    GPSViewController *gpsVC = GPSViewController.new;
+//    [self.navigationController pushViewController:gpsVC
+//                                         animated:YES];
 }
 
 - (void)_toSatnav {
