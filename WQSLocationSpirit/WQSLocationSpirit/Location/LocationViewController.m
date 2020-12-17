@@ -137,7 +137,7 @@
         _sureButton.layer.cornerRadius = 20;
         _sureButton.layer.masksToBounds = YES;
         [_sureButton setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
-        [_sureButton setTitle:@"开始设置" forState:UIControlStateNormal];
+        [_sureButton setTitle:@"锁定坐标" forState:UIControlStateNormal];
         _sureButton.titleLabel.font = [UIFont systemFontOfSize:13];
         [_sureButton setTitleColor:[UIColor whiteColor]
                           forState:UIControlStateNormal];
