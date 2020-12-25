@@ -300,6 +300,10 @@
     if (response.route == nil) {
         return;
     }
+    if (response.route.paths.count == 0) {
+        [self.view promptMessage:@"未搜索出有效路线"];
+        return;
+    }
     float latitude = self.startPlaceModel.latitude + (self.endPlaceModel.latitude - self.startPlaceModel.latitude);
     float longitude = self.startPlaceModel.longitude + (self.endPlaceModel.longitude - self.startPlaceModel.longitude);
     [self.maMapView setCenterCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
@@ -309,13 +313,11 @@
     //移除旧的开始和结束点
     [self.maMapView removeAnnotation:self.startAnnotionModel];
     [self.maMapView removeAnnotation:self.endAnnotionModel];
-    for (AMapPath *path in response.route.paths) {
-        //构造折线对象
-        MAPolyline *polyline = [self polylinesForPath:path];
-        [self.overlays addObject:polyline];
-        //添加新的遮盖，然后会触发代理方法(- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay)进行绘制
-        [self.maMapView addOverlay:polyline];
-    }
+    //构造折线对象
+    MAPolyline *polyline = [self polylinesForPath:response.route.paths[0]];
+    [self.overlays addObject:polyline];
+    //添加新的遮盖，然后会触发代理方法(- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay)进行绘制
+    [self.maMapView addOverlay:polyline];
     [self.startAnnotionModel setCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
     [self.endAnnotionModel setCoordinate:CLLocationCoordinate2DMake(self.endPlaceModel.latitude, self.endPlaceModel.longitude)];
     self.startAnnotionModel.name = @"起";

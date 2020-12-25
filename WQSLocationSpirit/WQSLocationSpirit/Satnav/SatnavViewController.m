@@ -195,8 +195,10 @@
     }
     MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
     MKMapItem *startLocation = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    startLocation.name = self.startPlaceModel.address;
     MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.endPlaceModel.latitude, self.endPlaceModel.longitude)];
     MKMapItem *endLocation = [[MKMapItem alloc] initWithPlacemark:endPlacemark];
+    endLocation.name = self.endPlaceModel.address;
     NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving,
                                     MKLaunchOptionsShowsTrafficKey : @(1)};
     if (self.selectBtn.tag == 101) {
@@ -281,15 +283,18 @@
             [weakSelf.view promptMessage:@"搜索失败"];
             return;
         }
+        if (response.routes.count == 0) {
+            [weakSelf.view promptMessage:@"未搜索出有效路线"];
+            return;
+        }
         float latitude = weakSelf.startPlaceModel.latitude + (weakSelf.endPlaceModel.latitude - weakSelf.startPlaceModel.latitude);
         float longitude = weakSelf.startPlaceModel.longitude + (weakSelf.endPlaceModel.longitude - weakSelf.startPlaceModel.longitude);
         [weakSelf.mapView setCenterCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
         [weakSelf.mapView removeOverlays:weakSelf.overlays];
         [weakSelf.overlays removeAllObjects];
-        for (MKRoute *route in response.routes) {
-            [weakSelf.mapView addOverlay:route.polyline];
-            [weakSelf.overlays addObject:route.polyline];
-        }
+        MKRoute *route = response.routes[0];
+        [weakSelf.mapView addOverlay:route.polyline];
+        [weakSelf.overlays addObject:route.polyline];
         [weakSelf.startAnnotionModel setCoordinate:CLLocationCoordinate2DMake(weakSelf.startPlaceModel.latitude, weakSelf.startPlaceModel.longitude)];
         [weakSelf.endAnnotionModel setCoordinate:CLLocationCoordinate2DMake(weakSelf.endPlaceModel.latitude, weakSelf.endPlaceModel.longitude)];
         weakSelf.startAnnotionModel.name = @"起";
