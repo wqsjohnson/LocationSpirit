@@ -248,7 +248,7 @@
 
 //苹果原生地图路线规划
 - (void)mapRequest {
-    if (!self.startPlaceModel || !self.endPlaceModel) {
+    if (!self.startPlaceModel || !self.endPlaceModel || !self.selectBtn) {
         return;
     }
     //1.创建方向请求

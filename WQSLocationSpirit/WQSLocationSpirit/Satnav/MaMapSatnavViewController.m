@@ -300,7 +300,9 @@
     if (response.route == nil) {
         return;
     }
-    [self.maMapView setCenterCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
+    float latitude = self.startPlaceModel.latitude + (self.endPlaceModel.latitude - self.startPlaceModel.latitude);
+    float longitude = self.startPlaceModel.longitude + (self.endPlaceModel.longitude - self.startPlaceModel.longitude);
+    [self.maMapView setCenterCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
     //移除旧折线对象
     [self.maMapView removeOverlays:self.overlays];
     [self.overlays removeAllObjects];
@@ -310,7 +312,7 @@
     for (AMapPath *path in response.route.paths) {
         //构造折线对象
         MAPolyline *polyline = [self polylinesForPath:path];
-        [self.overlays addObject:path];
+        [self.overlays addObject:polyline];
         //添加新的遮盖，然后会触发代理方法(- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay)进行绘制
         [self.maMapView addOverlay:polyline];
     }
@@ -386,7 +388,7 @@
         polylineRenderer.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:0.7];
         polylineRenderer.lineJoin = kCGLineJoinRound;
         polylineRenderer.lineCap  = kCGLineCapRound;
-        polylineRenderer.lineWidth = 15;
+        polylineRenderer.lineWidth = 5.0;
             
         return polylineRenderer;
     }
