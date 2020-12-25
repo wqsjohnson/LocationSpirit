@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WQSAnnotionModel : NSObject<MKAnnotation,MAAnnotation>
-
+@property (nonatomic, copy) NSString *name;
 @end
 
 NS_ASSUME_NONNULL_END

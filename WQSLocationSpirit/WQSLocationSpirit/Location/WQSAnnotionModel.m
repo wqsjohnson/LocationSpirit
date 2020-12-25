@@ -12,7 +12,7 @@
 
 @implementation WQSAnnotionModel
 - (NSString *)title {
-    return nil;
+    return self.name;
 }
 
 - (NSString *)subtitle {

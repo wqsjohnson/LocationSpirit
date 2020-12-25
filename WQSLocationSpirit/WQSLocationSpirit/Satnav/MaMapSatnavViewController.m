@@ -13,6 +13,7 @@
 #import "CommonMapSettingManager.h"
 #import "SearchViewController.h"
 #import "UIView+ActivityIndicatorView.h"
+#import "WQSAnnotionModel.h"
 @interface MaMapSatnavViewController ()<MAMapViewDelegate,AMapSearchDelegate>
 @property (nonatomic, strong) MAMapView *maMapView;
 @property (nonatomic, strong) AMapSearchAPI *aMapSearch;
@@ -22,7 +23,10 @@
 @property (nonatomic, strong) SearchPlaceModel *startPlaceModel;
 @property (nonatomic, strong) SearchPlaceModel *endPlaceModel;
 @property (nonatomic, strong) UIButton *selectBtn;
+@property (nonatomic, strong) UIButton *navButton;
 @property (nonatomic, strong) NSMutableArray *overlays;
+@property (nonatomic, strong) WQSAnnotionModel *startAnnotionModel;
+@property (nonatomic, strong) WQSAnnotionModel *endAnnotionModel;
 @end
 
 @implementation MaMapSatnavViewController
@@ -36,8 +40,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    self.startAnnotionModel = WQSAnnotionModel.new;
+    self.endAnnotionModel = WQSAnnotionModel.new;
     [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.maMapView];
+    [self.view addSubview:self.navButton];
     self.aMapSearch = [[AMapSearchAPI alloc] init];
     self.aMapSearch.delegate = self;
 }
@@ -143,10 +150,42 @@
 - (MAMapView *)maMapView {
     if (nil == _maMapView) {
         _maMapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, kNavigationBarHeight + 80, UIDeviceScreenWidth, UIDeviceScreenHeight - kNavigationBarHeight - 80)];
-        _maMapView.zoomLevel = 15;
+        _maMapView.zoomLevel = 10;
         _maMapView.delegate = self;
     }
     return _maMapView;
+}
+
+- (UIButton *)navButton {
+    if (nil == _navButton) {
+        _navButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _navButton.frame = CGRectMake((UIDeviceScreenWidth - 100) / 2, (UIDeviceScreenHeight - 140), 100, 40);
+        _navButton.layer.cornerRadius = 20;
+        _navButton.layer.masksToBounds = YES;
+        [_navButton setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
+        [_navButton setTitle:@"开始导航" forState:UIControlStateNormal];
+        _navButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_navButton setTitleColor:[UIColor whiteColor]
+                          forState:UIControlStateNormal];
+        [_navButton addTarget:self
+                        action:@selector(_navAction:)
+              forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _navButton;
+}
+
+- (void)_navAction:(UIButton *)sender {
+    UIApplication *application = [UIApplication sharedApplication];
+    if (![application canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
+        [self.view promptMessage:@"请安装高德地图"];
+        return;
+    }
+    NSString *appName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+    NSString *urlString = [[NSString stringWithFormat:@"iosamap://navi?sourceApplication=%@&backScheme=%@&lat=%f&lon=%f&dev=0&style=2",appName,@"WQSLocationSpirit",self.endPlaceModel.latitude, self.endPlaceModel.longitude] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [application openURL:[NSURL URLWithString:urlString]
+                 options:@{}
+       completionHandler:^(BOOL success) {
+    }];
 }
 
 - (void)tapAction:(UITapGestureRecognizer *)tap {
@@ -202,6 +241,14 @@
     [self.aMapSearch AMapDrivingRouteSearch:navi];
 }
 
+-(void)mapView:(MAMapView *)mapView didAddAnnotationViews:(NSArray *)views{
+    if ([views[0] isKindOfClass:MAPinAnnotationView.class]){
+        MAPinAnnotationView *mapView = (MAPinAnnotationView*)views[0];
+        [self.maMapView selectAnnotation:mapView.annotation
+                                animated:YES];
+    }
+}
+
 /* 路径规划搜索回调. */
 - (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request
                  response:(AMapRouteSearchResponse *)response {
@@ -212,6 +259,9 @@
     //移除旧折线对象
     [self.maMapView removeOverlays:self.overlays];
     [self.overlays removeAllObjects];
+    //移除旧的开始和结束点
+    [self.maMapView removeAnnotation:self.startAnnotionModel];
+    [self.maMapView removeAnnotation:self.endAnnotionModel];
     for (AMapPath *path in response.route.paths) {
         //构造折线对象
         MAPolyline *polyline = [self polylinesForPath:path];
@@ -219,6 +269,12 @@
         //添加新的遮盖，然后会触发代理方法(- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id<MAOverlay>)overlay)进行绘制
         [self.maMapView addOverlay:polyline];
     }
+    [self.startAnnotionModel setCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
+    [self.endAnnotionModel setCoordinate:CLLocationCoordinate2DMake(self.endPlaceModel.latitude, self.endPlaceModel.longitude)];
+    self.startAnnotionModel.name = @"起";
+    self.endAnnotionModel.name = @"终";
+    [self.maMapView addAnnotation:self.startAnnotionModel];
+    [self.maMapView addAnnotation:self.endAnnotionModel];
 }
 
 //路线解析
