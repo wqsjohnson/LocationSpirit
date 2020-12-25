@@ -290,7 +290,7 @@
     if ([views[0] isKindOfClass:MAPinAnnotationView.class]){
         MAPinAnnotationView *mapView = (MAPinAnnotationView*)views[0];
         [self.maMapView selectAnnotation:mapView.annotation
-                                animated:YES];
+                                animated:NO];
     }
 }
 
