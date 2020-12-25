@@ -14,6 +14,7 @@
 #import "SearchViewController.h"
 #import "UIView+ActivityIndicatorView.h"
 #import "WQSAnnotionModel.h"
+#import "MaAnnotationView.h"
 @interface MaMapSatnavViewController ()<MAMapViewDelegate,AMapSearchDelegate>
 @property (nonatomic, strong) MAMapView *maMapView;
 @property (nonatomic, strong) AMapSearchAPI *aMapSearch;
@@ -175,6 +176,10 @@
 }
 
 - (void)_navAction:(UIButton *)sender {
+    if (!self.endPlaceModel) {
+        [self.view promptMessage:@"请输入结束位置"];
+        return;
+    }
     UIApplication *application = [UIApplication sharedApplication];
     if (![application canOpenURL:[NSURL URLWithString:@"iosamap://"]]) {
         [self.view promptMessage:@"请安装高德地图"];
@@ -286,12 +291,18 @@
     [self.aMapSearch AMapRidingRouteSearch:navi];
 }
 
--(void)mapView:(MAMapView *)mapView didAddAnnotationViews:(NSArray *)views{
-    if ([views[0] isKindOfClass:MAPinAnnotationView.class]){
-        MAPinAnnotationView *mapView = (MAPinAnnotationView*)views[0];
-        [self.maMapView selectAnnotation:mapView.annotation
-                                animated:NO];
+-(MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
+    if ([annotation isKindOfClass:[WQSAnnotionModel class]]) {
+        static NSString *pointReuseIndetifier = @"pointReuseIndetifier";
+        MaAnnotationView *annotationView = (MaAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
+        if (annotationView == nil) {
+            annotationView = [[MaAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+        }
+        WQSAnnotionModel *annotationModel = (WQSAnnotionModel *)annotation;
+        annotationView.titleLabel.text = annotationModel.name;
+        return annotationView;
     }
+    return nil;
 }
 
 /* 路径规划搜索回调. */

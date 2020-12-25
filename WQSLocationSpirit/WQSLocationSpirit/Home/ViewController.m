@@ -80,7 +80,7 @@
          forControlEvents:UIControlEventTouchUpInside];
     
     NSArray *datas = @[@{@"img":@"",@"title":@"路线规划",@"detail":@"最优路线推荐"},
-                       @{@"img":@"",@"title":@"经纬度移动",@"detail":@"输入经纬度，精准位移"},
+                       //@{@"img":@"",@"title":@"经纬度移动",@"detail":@"输入经纬度，精准位移"},
                        @{@"img":@"",@"title":@"自由编辑定位",@"detail":@"拖动位置，搜索地标，轻松定位"}];
     for (NSInteger i = 0; i < datas.count; i++) {
         UIView *contentView = UIView.new;
@@ -97,7 +97,7 @@
             make.left.mas_equalTo(self.view).offset(15);
             make.right.mas_equalTo(self.view).offset(-15);
             make.height.mas_equalTo(120);
-            make.bottom.mas_equalTo(self.view).offset(-(i * (135) + 50));
+            make.bottom.mas_equalTo(self.view).offset(-((i + 1) * (135) + 50));
         }];
         
         //图片
@@ -158,11 +158,11 @@
             //自由编辑定位
             [self _toSatnav];
             break;
+//        case 1:
+//            //经纬度移动
+//            [self _toGPS];
+//            break;
         case 1:
-            //经纬度移动
-            [self _toGPS];
-            break;
-        case 2:
             //路线规划
             [self _toLocation];
             break;

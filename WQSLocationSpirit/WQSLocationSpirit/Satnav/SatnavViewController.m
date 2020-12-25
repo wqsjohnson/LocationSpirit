@@ -14,6 +14,7 @@
 #import "UIView+ActivityIndicatorView.h"
 #import "WQSAnnotionModel.h"
 #import "MKMapView+ZoomLevel.h"
+#import "AnnotionView.h"
 
 @interface SatnavViewController ()<MKMapViewDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
@@ -188,6 +189,10 @@
 }
 
 - (void)_navAction:(UIButton *)sender {
+    if (!self.startPlaceModel || !self.endPlaceModel) {
+        [self.view promptMessage:@"请输入起始位置和结束位置"];
+        return;
+    }
     UIApplication *application = [UIApplication sharedApplication];
     if (![application canOpenURL:[NSURL URLWithString:@"https://maps.apple.com/"]]) {
         [self.view promptMessage:@"无法打开地图"];
@@ -302,6 +307,20 @@
         [weakSelf.mapView addAnnotation:weakSelf.startAnnotionModel];
         [weakSelf.mapView addAnnotation:weakSelf.endAnnotionModel];
     }];
+}
+
+-(MKAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id<MAAnnotation>)annotation {
+    if ([annotation isKindOfClass:[WQSAnnotionModel class]]) {
+        static NSString *pointReuseIndetifier = @"pointReuseIndetifier";
+        AnnotionView *annotationView = (AnnotionView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
+        if (annotationView == nil) {
+            annotationView = [[AnnotionView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+        }
+        WQSAnnotionModel *annotationModel = (WQSAnnotionModel *)annotation;
+        annotationView.titleLabel.text = annotationModel.name;
+        return annotationView;
+    }
+    return nil;
 }
 
 //线路的绘制
