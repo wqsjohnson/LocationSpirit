@@ -230,6 +230,9 @@
 }
 
 - (void)_startRouteSearch {
+    if (!self.startPlaceModel || !self.endPlaceModel) {
+        return;
+    }
     switch (self.selectBtn.tag) {
         case 100:
             [self _drivingRouteSearch];

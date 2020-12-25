@@ -11,6 +11,7 @@
 		861B2C5B258B0F240011E792 /* MaMapSatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B2C5A258B0F240011E792 /* MaMapSatnavViewController.m */; };
 		861B2C67258B4FE50011E792 /* LocationCollectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B2C66258B4FE50011E792 /* LocationCollectViewController.m */; };
 		861B4D40257739910031842A /* WQSAnnotionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 861B4D3F257739910031842A /* WQSAnnotionModel.m */; };
+		86381C0F2595CB4900E9E82C /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86381C0E2595CB4900E9E82C /* MKMapView+ZoomLevel.m */; };
 		8666CFE8258755B7005733ED /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFE7258755B7005733ED /* SettingViewController.m */; };
 		8666CFF125875688005733ED /* SatnavViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF025875688005733ED /* SatnavViewController.m */; };
 		8666CFF7258756B6005733ED /* LocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666CFF6258756B6005733ED /* LocationViewController.m */; };
@@ -55,6 +56,8 @@
 		861B2C66258B4FE50011E792 /* LocationCollectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationCollectViewController.m; sourceTree = "<group>"; };
 		861B4D3E257739910031842A /* WQSAnnotionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WQSAnnotionModel.h; sourceTree = "<group>"; };
 		861B4D3F257739910031842A /* WQSAnnotionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WQSAnnotionModel.m; sourceTree = "<group>"; };
+		86381C0D2595CB4900E9E82C /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
+		86381C0E2595CB4900E9E82C /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		8666CFE6258755B7005733ED /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		8666CFE7258755B7005733ED /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		8666CFEF25875688005733ED /* SatnavViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SatnavViewController.h; sourceTree = "<group>"; };
@@ -200,6 +203,8 @@
 				86FC870B2576495E003FAAF1 /* UIDevice+MC.m */,
 				86F17844258854C00034AB2E /* UIView+ActivityIndicatorView.h */,
 				86F17843258854C00034AB2E /* UIView+ActivityIndicatorView.m */,
+				86381C0D2595CB4900E9E82C /* MKMapView+ZoomLevel.h */,
+				86381C0E2595CB4900E9E82C /* MKMapView+ZoomLevel.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -468,6 +473,7 @@
 				8666CFF125875688005733ED /* SatnavViewController.m in Sources */,
 				861B2C67258B4FE50011E792 /* LocationCollectViewController.m in Sources */,
 				869DF1A02576452000D916EC /* SearchViewController.m in Sources */,
+				86381C0F2595CB4900E9E82C /* MKMapView+ZoomLevel.m in Sources */,
 				869268E12588A0F7007CA29A /* AboutUsViewController.m in Sources */,
 				869268F32588C425007CA29A /* SearchPlaceModel.m in Sources */,
 				869DF161257630A100D916EC /* main.m in Sources */,

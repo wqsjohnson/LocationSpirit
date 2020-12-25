@@ -17,6 +17,7 @@
 #import "WQSAnnotionModel.h"
 //category
 #import "UIView+ActivityIndicatorView.h"
+#import "MKMapView+ZoomLevel.h"
 @interface LocationViewController ()<MKMapViewDelegate,MAMapViewDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MAMapView *maMapView;
@@ -113,6 +114,7 @@
         _mapView.showsScale = YES;
         // 是否显示交通（iOS9.0）
         _mapView.showsTraffic = YES;
+        _mapView.zoomLevel = 10;
         // 是否显示建筑物
         _mapView.showsBuildings = YES;
         _mapView.userTrackingMode = MKUserTrackingModeFollowWithHeading;

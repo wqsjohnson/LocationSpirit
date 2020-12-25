@@ -12,6 +12,8 @@
 #import "CommonMapSettingManager.h"
 #import "SearchViewController.h"
 #import "UIView+ActivityIndicatorView.h"
+#import "WQSAnnotionModel.h"
+#import "MKMapView+ZoomLevel.h"
 
 @interface SatnavViewController ()<MKMapViewDelegate>
 @property (nonatomic, strong) MKMapView *mapView;
@@ -21,7 +23,10 @@
 @property (nonatomic, strong) SearchPlaceModel *startPlaceModel;
 @property (nonatomic, strong) SearchPlaceModel *endPlaceModel;
 @property (nonatomic, strong) UIButton *selectBtn;
+@property (nonatomic, strong) UIButton *navButton;
 @property (nonatomic, strong) NSMutableArray *overlays;
+@property (nonatomic, strong) WQSAnnotionModel *startAnnotionModel;
+@property (nonatomic, strong) WQSAnnotionModel *endAnnotionModel;
 @end
 
 @implementation SatnavViewController
@@ -35,8 +40,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    self.startAnnotionModel = WQSAnnotionModel.new;
+    self.endAnnotionModel = WQSAnnotionModel.new;
     [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.mapView];
+    [self.view addSubview:self.navButton];
 }
 
 - (UIView *)navigationBar {
@@ -151,6 +159,7 @@
         _mapView.showsScale = YES;
         // 是否显示交通（iOS9.0）
         _mapView.showsTraffic = YES;
+        _mapView.zoomLevel = 10;
         // 是否显示建筑物
         _mapView.showsBuildings = YES;
         _mapView.userTrackingMode = MKUserTrackingModeFollowWithHeading;
@@ -158,6 +167,42 @@
         _mapView.showsUserLocation = YES;
     }
     return _mapView;
+}
+
+- (UIButton *)navButton {
+    if (nil == _navButton) {
+        _navButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _navButton.frame = CGRectMake((UIDeviceScreenWidth - 100) / 2, (UIDeviceScreenHeight - 140), 100, 40);
+        _navButton.layer.cornerRadius = 20;
+        _navButton.layer.masksToBounds = YES;
+        [_navButton setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
+        [_navButton setTitle:@"开始导航" forState:UIControlStateNormal];
+        _navButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        [_navButton setTitleColor:[UIColor whiteColor]
+                          forState:UIControlStateNormal];
+        [_navButton addTarget:self
+                        action:@selector(_navAction:)
+              forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _navButton;
+}
+
+- (void)_navAction:(UIButton *)sender {
+    UIApplication *application = [UIApplication sharedApplication];
+    if (![application canOpenURL:[NSURL URLWithString:@"https://maps.apple.com/"]]) {
+        [self.view promptMessage:@"无法打开地图"];
+        return;
+    }
+    MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
+    MKMapItem *startLocation = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    MKPlacemark *endPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.endPlaceModel.latitude, self.endPlaceModel.longitude)];
+    MKMapItem *endLocation = [[MKMapItem alloc] initWithPlacemark:endPlacemark];
+    NSDictionary *launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving,
+                                    MKLaunchOptionsShowsTrafficKey : @(1)};
+    if (self.selectBtn.tag == 101) {
+        launchOptions = @{MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeWalking};
+    }
+    [MKMapItem openMapsWithItems:@[startLocation,endLocation] launchOptions:launchOptions];
 }
 
 - (void)tapAction:(UITapGestureRecognizer *)tap {
@@ -203,6 +248,9 @@
 
 //苹果原生地图路线规划
 - (void)mapRequest {
+    if (!self.startPlaceModel || !self.endPlaceModel) {
+        return;
+    }
     //1.创建方向请求
     MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
     request.requestsAlternateRoutes = YES;//是否需要多条可用的路线
@@ -233,9 +281,21 @@
             [weakSelf.view promptMessage:@"搜索失败"];
             return;
         }
+        float latitude = weakSelf.startPlaceModel.latitude + (weakSelf.endPlaceModel.latitude - weakSelf.startPlaceModel.latitude);
+        float longitude = weakSelf.startPlaceModel.longitude + (weakSelf.endPlaceModel.longitude - weakSelf.startPlaceModel.longitude);
+        [weakSelf.mapView setCenterCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
+        [weakSelf.mapView removeOverlays:weakSelf.overlays];
+        [weakSelf.overlays removeAllObjects];
         for (MKRoute *route in response.routes) {
-            [self.mapView addOverlay:route.polyline];
+            [weakSelf.mapView addOverlay:route.polyline];
+            [weakSelf.overlays addObject:route.polyline];
         }
+        [weakSelf.startAnnotionModel setCoordinate:CLLocationCoordinate2DMake(weakSelf.startPlaceModel.latitude, weakSelf.startPlaceModel.longitude)];
+        [weakSelf.endAnnotionModel setCoordinate:CLLocationCoordinate2DMake(weakSelf.endPlaceModel.latitude, weakSelf.endPlaceModel.longitude)];
+        weakSelf.startAnnotionModel.name = @"起";
+        weakSelf.endAnnotionModel.name = @"终";
+        [weakSelf.mapView addAnnotation:weakSelf.startAnnotionModel];
+        [weakSelf.mapView addAnnotation:weakSelf.endAnnotionModel];
     }];
 }
 
