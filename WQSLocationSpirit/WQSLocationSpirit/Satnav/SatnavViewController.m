@@ -115,7 +115,7 @@
         CGFloat typeBtnWidth = 80;
         CGFloat typeBtnSeperate = 10;
         CGFloat typeBtnHeight = 30;
-        NSArray *typeDatas = @[@"驾车",@"步行",@"公交",@"骑行"];
+        NSArray *typeDatas = @[@"驾车",@"步行"];
         for (NSInteger i = 0; i < typeDatas.count; i++) {
             UIButton *typeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             typeBtn.layer.cornerRadius = 15;
@@ -173,6 +173,8 @@
             weakSelf.endPlaceModel = placeModel;
             weakSelf.endPlace.text = placeModel.address;
         }
+        
+        [weakSelf mapRequest];
     };
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
     navigation.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -204,7 +206,16 @@
     //1.创建方向请求
     MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
     request.requestsAlternateRoutes = YES;//是否需要多条可用的路线
-    request.transportType = MKDirectionsTransportTypeAutomobile;
+    switch (self.selectBtn.tag) {
+        case 100:
+            request.transportType = MKDirectionsTransportTypeAutomobile;
+            break;
+        case 101:
+            request.transportType = MKDirectionsTransportTypeWalking;
+            break;
+        default:
+            break;
+    }
     //2.设置起点
     MKPlacemark *startPlace = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(self.startPlaceModel.latitude, self.startPlaceModel.longitude)];
     request.source = [[MKMapItem alloc] initWithPlacemark:startPlace];

@@ -125,7 +125,7 @@
         CGFloat typeBtnWidth = 80;
         CGFloat typeBtnSeperate = 10;
         CGFloat typeBtnHeight = 30;
-        NSArray *typeDatas = @[@"驾车",@"步行",@"公交",@"骑行"];
+        NSArray *typeDatas = @[@"驾车",@"步行",@"骑行"];
         for (NSInteger i = 0; i < typeDatas.count; i++) {
             UIButton *typeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             typeBtn.layer.cornerRadius = 15;
@@ -201,6 +201,8 @@
             weakSelf.endPlaceModel = placeModel;
             weakSelf.endPlace.text = placeModel.address;
         }
+        
+        [weakSelf _startRouteSearch];
     };
     UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:searchVC];
     navigation.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -224,7 +226,23 @@
     self.selectBtn = sender;
     self.selectBtn.selected = YES;
     [self.selectBtn setBackgroundColor:[[UIColor blueColor] colorWithAlphaComponent:0.6]];
-    [self _drivingRouteSearch];
+    [self _startRouteSearch];
+}
+
+- (void)_startRouteSearch {
+    switch (self.selectBtn.tag) {
+        case 100:
+            [self _drivingRouteSearch];
+            break;
+        case 101:
+            [self _walkRouteSearch];
+            break;
+        case 102:
+            [self _rideRouteSearch];
+            break;
+        default:
+            break;
+    }
 }
 
 //高德驾车路线规划
@@ -239,6 +257,30 @@
     navi.destination = [AMapGeoPoint locationWithLatitude:self.endPlaceModel.latitude
                                                 longitude:self.endPlaceModel.longitude];
     [self.aMapSearch AMapDrivingRouteSearch:navi];
+}
+
+//高德步行路线规划
+- (void)_walkRouteSearch {
+    AMapWalkingRouteSearchRequest *navi = [[AMapWalkingRouteSearchRequest alloc] init];
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:self.startPlaceModel.latitude
+                                           longitude:self.startPlaceModel.longitude];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:self.endPlaceModel.latitude
+                                                longitude:self.endPlaceModel.longitude];
+    [self.aMapSearch AMapWalkingRouteSearch:navi];
+}
+
+//高德骑行路线规划
+- (void)_rideRouteSearch {
+    AMapRidingRouteSearchRequest *navi = [[AMapRidingRouteSearchRequest alloc] init];
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:self.startPlaceModel.latitude
+                                           longitude:self.startPlaceModel.longitude];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:self.endPlaceModel.latitude
+                                                longitude:self.endPlaceModel.longitude];
+    [self.aMapSearch AMapRidingRouteSearch:navi];
 }
 
 -(void)mapView:(MAMapView *)mapView didAddAnnotationViews:(NSArray *)views{
