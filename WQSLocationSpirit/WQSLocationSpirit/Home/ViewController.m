@@ -27,7 +27,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self _initUI];
-    
     id mapType = [[NSUserDefaults standardUserDefaults] objectForKey:@"MapType"];
     if (mapType) {
         CommonMapSettingManager.manager.type = [mapType integerValue];

@@ -19,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //注册高德地图
     [AMapServices sharedServices].apiKey = @"26dcf9321f8e878240b2af6120b7324b";
-    
+    [NSThread sleepForTimeInterval:1.0f];//时间可灵活修改
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
